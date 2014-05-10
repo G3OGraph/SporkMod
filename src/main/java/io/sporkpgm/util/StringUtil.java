@@ -363,6 +363,7 @@ public class StringUtil {
 			}
 
 			empty = allEmpty(result);
+			count--;
 		}
 
 		return result;
@@ -370,7 +371,7 @@ public class StringUtil {
 
 	private static boolean allEmpty(String[] strings) {
 		for(String string : strings) {
-			if(string != null && string.length() > 0) {
+			if(!string.equals("")) {
 				return false;
 			}
 		}

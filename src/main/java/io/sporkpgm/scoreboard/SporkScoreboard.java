@@ -10,23 +10,46 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public abstract class SporkScoreboard {
 
+	protected String title;
 	protected ScoreboardHandler handler;
 	protected Scoreboard scoreboard;
 	protected Objective objective;
 
 	protected List<ScoreboardEntry> entries;
 
-	public SporkScoreboard(ScoreboardHandler handler) {
+	public SporkScoreboard(String title, ScoreboardHandler handler) {
+		this.title = title;
 		this.handler = handler;
-		this.scoreboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
-		this.objective = scoreboard.registerNewObjective("Sidebar", "dummy");
-		this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-		this.objective.setDisplayName(ChatColor.GOLD + "Sidebar");
 		this.entries = new ArrayList<>();
+		reset();
+	}
+
+	public void reset() {
+		Map<ScoreboardEntry, Integer> scores = new HashMap<>();
+		for(ScoreboardEntry entry : entries) {
+			if(entry.isActive()) {
+				scores.put(entry, entry.getValue());
+			}
+		}
+
+		if(objective != null) {
+			objective.unregister();
+		}
+
+		objective = scoreboard.registerNewObjective("Sidebar", "dummy");
+		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+		objective.setDisplayName(title);
+
+		for(Entry<ScoreboardEntry, Integer> entry : scores.entrySet()) {
+			entry.getKey().setValue(entry.getValue());
+		}
 	}
 
 	public ScoreboardHandler getHandler() {
@@ -100,7 +123,7 @@ public abstract class SporkScoreboard {
 	}
 
 	public ScoreboardEntry blank(int score) {
-		StringBuilder spaces = new StringBuilder(" ");
+		StringBuilder spaces = new StringBuilder(ChatColor.WHITE + "");
 		ScoreboardEntry sbEntry = getEntry(spaces.toString());
 		while(sbEntry.isSet() && spaces.length() <= 16) {
 			spaces.append(" ");

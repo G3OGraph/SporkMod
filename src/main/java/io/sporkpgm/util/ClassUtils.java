@@ -1,5 +1,6 @@
 package io.sporkpgm.util;
 
+import com.google.common.base.Preconditions;
 import org.bukkit.Bukkit;
 
 import java.lang.reflect.Constructor;
@@ -92,21 +93,21 @@ public class ClassUtils {
 		return constructor.newInstance(values);
 	}
 
-	public static String build(Class<?> clazz, Object object) {
+	public static <T> String build(T object) {
 		try {
-			return buildThrows(clazz, object);
+			return buildThrows(object);
 		} catch(IllegalAccessException illegal) {
 			illegal.printStackTrace();
-			return clazz.getSimpleName() + "{class=" + clazz.getName() + "}";
+			return object.getClass().getSimpleName() + "{class=" + object.getClass().getName() + "}";
 		}
 	}
 
-	private static String buildThrows(Class<?> clazz, Object object) throws IllegalAccessException {
+	private static <T> String buildThrows(T object) throws IllegalAccessException {
 		StringBuilder string = new StringBuilder();
-		string.append(clazz.getSimpleName()).append("{");
+		string.append(object.getClass().getSimpleName()).append("{");
 
 		boolean previous = false;
-		Field[] fields = clazz.getDeclaredFields();
+		Field[] fields = object.getClass().getDeclaredFields();
 		for(Field field : fields) {
 			field.setAccessible(true);
 			if(previous) {
@@ -121,7 +122,7 @@ public class ClassUtils {
 			string.append(",");
 		}
 
-		string.append("class").append("=").append(clazz.getName());
+		string.append("class").append("=").append(object.getClass().getName());
 
 		string.append("}");
 		return string.toString();

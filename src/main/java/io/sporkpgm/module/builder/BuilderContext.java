@@ -127,7 +127,7 @@ public class BuilderContext {
 
 	@Override
 	public String toString() {
-		return ClassUtils.build(getClass(), this);
+		return ClassUtils.build(this);
 	}
 
 }

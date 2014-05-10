@@ -7,6 +7,7 @@ import io.sporkpgm.scoreboard.ScoreboardEntry;
 import io.sporkpgm.scoreboard.ScoreboardHandler;
 import io.sporkpgm.scoreboard.SporkScoreboard;
 import io.sporkpgm.scoreboard.UpdateableEntry;
+import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +21,7 @@ public class ObjectiveScoreboard extends SporkScoreboard {
 	private Map<TeamModule, List<ObjectiveModule>> teams;
 
 	public ObjectiveScoreboard(ScoreboardHandler handler) {
-		super(handler);
+		super(ChatColor.GOLD + "Objectives", handler);
 	}
 
 	public void setup() {

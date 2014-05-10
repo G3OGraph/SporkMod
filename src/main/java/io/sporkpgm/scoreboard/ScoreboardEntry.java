@@ -1,6 +1,7 @@
 package io.sporkpgm.scoreboard;
 
 import com.google.common.base.Preconditions;
+import io.sporkpgm.util.ClassUtils;
 import io.sporkpgm.util.Log;
 import io.sporkpgm.util.ScoreboardUtil;
 import io.sporkpgm.util.StringUtil;
@@ -24,52 +25,8 @@ public class ScoreboardEntry {
 		score();
 	}
 
-	protected void score() {
-		this.score = null;
-		Objective objective = scoreboard.getObjective();
-		String[] split = StringUtil.trim(name, 48, 3);
-
-		try {
-			Method getScore = Objective.class.getDeclaredMethod("getScore", String.class);
-			getScore.setAccessible(true);
-			this.score = (Score) getScore.invoke(objective, split[1]);
-		} catch(Exception e) {
-			Log.exception(e);
-		}
-
-		if(score == null) {
-			try {
-				this.score = objective.getScore(Bukkit.getOfflinePlayer(split[1]));
-			} catch(Exception e) {
-				Log.exception(e);
-			}
-		}
-
-		Preconditions.checkState(score != null, "Unable to create a Score for " + scoreboard);
-	}
-
-	public void create() {
-		if(!isSet()) {
-			this.score = null;
-			Objective objective = scoreboard.getObjective();
-			String[] split = StringUtil.trim(name, 48, 3);
-
-			try {
-				Method getScore = Objective.class.getDeclaredMethod("getScore", String.class);
-				getScore.setAccessible(true);
-				this.score = (Score) getScore.invoke(objective, split[1]);
-			} catch(Exception e) {
-				Log.exception(e);
-			}
-
-			if(score == null) {
-				try {
-					this.score = objective.getScore(Bukkit.getOfflinePlayer(split[1]));
-				} catch(Exception e) {
-					Log.exception(e);
-				}
-			}
-		}
+	public boolean isActive() {
+		return active;
 	}
 
 	public String getName() {
@@ -91,10 +48,6 @@ public class ScoreboardEntry {
 
 	public void setValue(int value) {
 		Preconditions.checkState(active, "Scoreboard Entry is inactive");
-		if(!isSet()) {
-			create();
-			setValue(1);
-		}
 		this.score.setScore(value);
 	}
 
@@ -106,7 +59,7 @@ public class ScoreboardEntry {
 
 	public void remove() {
 		this.active = false;
-		ScoreboardUtil.reset(score);
+		scoreboard.reset();
 	}
 
 	public boolean isSet() {
@@ -114,12 +67,50 @@ public class ScoreboardEntry {
 	}
 
 	public void update(String name) {
+		Log.debug("Doing okay (nothing)");
 		int value = getValue();
+		Log.debug("Doing okay (fetched value)");
 		remove();
+		Log.debug("Doing okay (removed)");
 		this.active = true;
 		this.name = name;
+		Log.debug("Doing okay (updated fields)");
 		score();
+		Log.debug("Doing okay (setup score)");
 		setValue(value);
+		Log.debug("Doing okay (set score value)");
+	}
+
+	protected void score() {
+		create();
+		Preconditions.checkState(score != null, "Unable to create a Score for " + scoreboard);
+	}
+
+	public void create() {
+		this.score = null;
+		Objective objective = scoreboard.getObjective();
+		String[] split = StringUtil.trim(name, 48, 3);
+
+		try {
+			Method getScore = Objective.class.getDeclaredMethod("getScore", String.class);
+			getScore.setAccessible(true);
+			this.score = (Score) getScore.invoke(objective, split[1]);
+		} catch(Exception e) {
+			// Log.exception(e);
+		}
+
+		if(score == null) {
+			try {
+				this.score = objective.getScore(Bukkit.getOfflinePlayer(split[1]));
+			} catch(Exception e) {
+				Log.exception(e);
+			}
+		}
+	}
+
+	@Override
+	public String toString() {
+		return ClassUtils.build(this);
 	}
 
 }
