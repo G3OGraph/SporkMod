@@ -27,6 +27,7 @@ public abstract class SporkScoreboard {
 	public SporkScoreboard(String title, ScoreboardHandler handler) {
 		this.title = title;
 		this.handler = handler;
+		this.scoreboard = Bukkit.getServer().getScoreboardManager().getNewScoreboard();
 		this.entries = new ArrayList<>();
 		reset();
 	}
@@ -48,6 +49,7 @@ public abstract class SporkScoreboard {
 		objective.setDisplayName(title);
 
 		for(Entry<ScoreboardEntry, Integer> entry : scores.entrySet()) {
+			entry.getKey().score();
 			entry.getKey().setValue(entry.getValue());
 		}
 	}

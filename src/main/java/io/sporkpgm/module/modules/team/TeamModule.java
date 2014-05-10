@@ -6,6 +6,7 @@ import io.sporkpgm.module.ModuleInfo;
 import io.sporkpgm.module.modules.spawn.SpawnModule;
 import io.sporkpgm.scoreboard.SporkTeam;
 import io.sporkpgm.user.User;
+import io.sporkpgm.util.ClassUtils;
 import io.sporkpgm.util.OtherUtil;
 import org.bukkit.ChatColor;
 
@@ -165,7 +166,7 @@ public class TeamModule extends Module {
 
 	@Override
 	public String toString() {
-		return "TeamModule{name=" + name + ",color=" + color.name() + ",overhead=" + overhead.name() + ",max=" + max + ",overfill=" + overfill + "}";
+		return ClassUtils.build(this);
 	}
 
 }

@@ -7,6 +7,7 @@ import io.sporkpgm.scoreboard.ScoreboardEntry;
 import io.sporkpgm.scoreboard.ScoreboardHandler;
 import io.sporkpgm.scoreboard.SporkScoreboard;
 import io.sporkpgm.scoreboard.UpdateableEntry;
+import io.sporkpgm.util.Log;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class ObjectiveScoreboard extends SporkScoreboard {
 			}
 
 			teams.get(objective.getTeam()).add(objective);
+			Log.debug("Added " + objective + " to " + objective.getTeam());
 		}
 
 		int score = 1;

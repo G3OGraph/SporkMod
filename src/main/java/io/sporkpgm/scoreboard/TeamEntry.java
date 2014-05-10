@@ -37,6 +37,9 @@ public class TeamEntry extends UpdateableEntry {
 		scoreboard.getEntries().remove(entry);
 
 		update(name);
+		if(!scoreboard.getEntries().contains(this)) {
+			scoreboard.getEntries().add(this);
+		}
 	}
 
 }

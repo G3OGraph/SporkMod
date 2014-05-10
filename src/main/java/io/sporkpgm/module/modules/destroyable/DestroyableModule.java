@@ -9,6 +9,7 @@ import io.sporkpgm.module.modules.region.Region;
 import io.sporkpgm.module.modules.region.types.BlockRegion;
 import io.sporkpgm.module.modules.team.TeamModule;
 import io.sporkpgm.user.User;
+import io.sporkpgm.util.ClassUtils;
 import io.sporkpgm.util.Log;
 import io.sporkpgm.util.StringUtil;
 import org.bukkit.Bukkit;
@@ -272,6 +273,11 @@ public class DestroyableModule extends ObjectiveModule implements Listener {
 
 		double percent = complete * 100;
 		return (int) percent;
+	}
+
+	@Override
+	public String toString() {
+		return ClassUtils.build(this);
 	}
 
 }

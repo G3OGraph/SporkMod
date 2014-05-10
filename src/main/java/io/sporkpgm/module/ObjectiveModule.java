@@ -5,6 +5,7 @@ import io.sporkpgm.module.modules.team.TeamModule;
 import io.sporkpgm.scoreboard.exceptions.IllegalScoreboardException;
 import io.sporkpgm.scoreboard.objective.ObjectiveScoreboard;
 import io.sporkpgm.scoreboard.objective.TeamObjective;
+import io.sporkpgm.util.ClassUtils;
 import io.sporkpgm.util.Log;
 
 public abstract class ObjectiveModule extends Module implements TeamObjective {
@@ -48,6 +49,11 @@ public abstract class ObjectiveModule extends Module implements TeamObjective {
 	public void setComplete(boolean complete) {
 		this.complete = complete;
 		this.scoreboard.update();
+	}
+
+	@Override
+	public String toString() {
+		return ClassUtils.build(this);
 	}
 
 }
