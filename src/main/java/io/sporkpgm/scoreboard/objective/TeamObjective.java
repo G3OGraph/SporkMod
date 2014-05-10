@@ -4,7 +4,7 @@ import io.sporkpgm.module.modules.team.TeamModule;
 
 public interface TeamObjective {
 
-	public String getDisplay();
+	public String getName();
 
 	public TeamModule getTeam();
 

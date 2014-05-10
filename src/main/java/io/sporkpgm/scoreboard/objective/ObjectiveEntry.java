@@ -17,7 +17,7 @@ public class ObjectiveEntry extends UpdateableEntry {
 	protected ObjectiveModule objective;
 
 	public ObjectiveEntry(ObjectiveModule objective, SporkScoreboard scoreboard) {
-		super(objective.getDisplay(), scoreboard);
+		super(objective.getName(), scoreboard);
 		this.complete = objective.isComplete();
 		this.objective = objective;
 		update(true);
@@ -32,7 +32,7 @@ public class ObjectiveEntry extends UpdateableEntry {
 			return;
 		}
 
-		String name = (objective.isComplete() ? GREEN + "" + TICK : RED + "" + CROSS) + " " + WHITE + objective.getDisplay();
+		String name = " " + (objective.isComplete() ? GREEN + "" + TICK : RED + "" + CROSS) + " " + WHITE + objective.getName();
 		ScoreboardEntry entry = scoreboard.getEntry(name, true);
 		name = entry.getName();
 		scoreboard.getEntries().remove(entry);

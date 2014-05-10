@@ -74,7 +74,7 @@ public class Spork extends JavaPlugin {
 		this.factory.register(SpawnModule.class);
 		this.factory.register(Filter.class);
 		this.factory.register(DestroyableModule.class);
-		Log.debug("Loaded Modules into the Factory");
+		Log.debug("Loaded " + this.factory.getBuilders().size() + " Modules into the Factory");
 
 		new SporkFactory();
 		for(File file : Maps.getFiles()) {

@@ -125,9 +125,11 @@ public abstract class SporkScoreboard {
 	}
 
 	public ScoreboardEntry blank(int score) {
-		StringBuilder spaces = new StringBuilder(ChatColor.WHITE + "");
+		StringBuilder spaces = new StringBuilder(".");
+		spaces.append(" ");
+
 		ScoreboardEntry sbEntry = getEntry(spaces.toString());
-		while(sbEntry.isSet() && spaces.length() <= 16) {
+		while(hasEntry(spaces.toString()) && spaces.length() <= 16) {
 			spaces.append(" ");
 			sbEntry = getEntry(spaces.toString());
 		}

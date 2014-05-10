@@ -5,10 +5,11 @@ import io.sporkpgm.module.modules.team.TeamModule;
 import io.sporkpgm.scoreboard.exceptions.IllegalScoreboardException;
 import io.sporkpgm.scoreboard.objective.ObjectiveScoreboard;
 import io.sporkpgm.scoreboard.objective.TeamObjective;
+import io.sporkpgm.tourney.TourneyScore;
 import io.sporkpgm.util.ClassUtils;
 import io.sporkpgm.util.Log;
 
-public abstract class ObjectiveModule extends Module implements TeamObjective {
+public abstract class ObjectiveModule extends Module implements TeamObjective, TourneyScore {
 
 	protected SporkMap map;
 	protected ObjectiveScoreboard scoreboard;
@@ -34,7 +35,7 @@ public abstract class ObjectiveModule extends Module implements TeamObjective {
 		return map;
 	}
 
-	public String getDisplay() {
+	public String getName() {
 		return name;
 	}
 

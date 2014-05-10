@@ -14,6 +14,7 @@ import java.lang.reflect.Method;
 public class ScoreboardEntry {
 
 	private boolean active = true;
+	private boolean set;
 
 	protected String name;
 	protected SporkScoreboard scoreboard;
@@ -47,13 +48,26 @@ public class ScoreboardEntry {
 	}
 
 	public void setValue(int value) {
+		setValue(true, value);
+	}
+
+	public void setValue(boolean debug, int value) {
 		Preconditions.checkState(active, "Scoreboard Entry is inactive");
+		if(debug) {
+			Log.debug(7);
+			Log.info("Set value of '" + name + "' to " + value);
+		}
 		this.score.setScore(value);
+		set = true;
 	}
 
 	public void setValue(int... scores) {
+		setValue(true, scores);
+	}
+
+	public void setValue(boolean debug, int... scores) {
 		for(int score : scores) {
-			setValue(score);
+			setValue(debug, score);
 		}
 	}
 
@@ -63,7 +77,7 @@ public class ScoreboardEntry {
 	}
 
 	public boolean isSet() {
-		return ScoreboardUtil.isSet(score);
+		return set;
 	}
 
 	public void update(String name) {
@@ -77,7 +91,7 @@ public class ScoreboardEntry {
 		Log.debug("Doing okay (updated fields)");
 		score();
 		Log.debug("Doing okay (setup score)");
-		setValue(value);
+		setValue(false, value);
 		Log.debug("Doing okay (set score value)");
 	}
 

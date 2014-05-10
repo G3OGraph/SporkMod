@@ -347,7 +347,7 @@ public class StringUtil {
 
 		int section = length/sections;
 		if(string.length() <= section) {
-			result[(result.length > 1 ? 2 : 1)] = string;
+			result[(result.length > 1 ? 1 : 0)] = string;
 			return result;
 		}
 
