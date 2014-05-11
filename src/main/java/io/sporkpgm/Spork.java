@@ -15,6 +15,7 @@ import io.sporkpgm.commands.TeamCommands;
 import io.sporkpgm.listeners.*;
 import io.sporkpgm.map.SporkFactory;
 import io.sporkpgm.module.builder.BuilderFactory;
+import io.sporkpgm.module.modules.core.CoreModule;
 import io.sporkpgm.module.modules.damage.DisableDamageBuilder;
 import io.sporkpgm.module.modules.damage.DisableDamageModule;
 import io.sporkpgm.module.modules.destroyable.DestroyableModule;
@@ -28,6 +29,7 @@ import io.sporkpgm.module.modules.mob.MobModule;
 import io.sporkpgm.module.modules.region.Region;
 import io.sporkpgm.module.modules.spawn.SpawnModule;
 import io.sporkpgm.module.modules.team.TeamModule;
+import io.sporkpgm.module.modules.victory.VictoryModule;
 import io.sporkpgm.rotation.Rotation;
 import io.sporkpgm.util.Config;
 import io.sporkpgm.util.Log;
@@ -90,6 +92,8 @@ public class Spork extends JavaPlugin {
 		this.factory.register(ItemRemoveModule.class);
 		this.factory.register(MaxHeightModule.class);
 		this.factory.register(DestroyableModule.class);
+		this.factory.register(VictoryModule.class);
+		this.factory.register(CoreModule.class);
 		Log.debug("Loaded " + this.factory.getBuilders().size() + " Modules into the Factory");
 
 		new SporkFactory();
