@@ -100,7 +100,7 @@ public class PlayerListener implements Listener {
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
 		User player = User.getUser(event.getPlayer());
 		player.updateInventory();
-		if(!player.isObserver()) {
+		if(player.isObserver()) {
 			event.setCancelled(true);
 		}
 	}
@@ -120,7 +120,7 @@ public class PlayerListener implements Listener {
 			User damager = User.getUser((Player) event.getDamager());
 			User victim = User.getUser((Player) event.getEntity());
 
-			if(!damager.isObserver()) {
+			if(damager.isObserver()) {
 				event.setCancelled(true);
 			} else {
 				victim.updateInventory();
@@ -160,7 +160,7 @@ public class PlayerListener implements Listener {
 			User clicked = User.getUser((Player) event.getRightClicked());
 			Log.info(clicked.getName() + " has been right clicked by " + event.getPlayer().getName());
 
-			if(!player.isObserver()) {
+			if(player.isObserver()) {
 				event.getPlayer().openInventory(clicked.getInventory());
 				Log.info(clicked.getName() + " has had their inventory opened by " + event.getPlayer().getName());
 			}
@@ -172,7 +172,7 @@ public class PlayerListener implements Listener {
 		if(event.getWhoClicked() instanceof Player) {
 			User player = User.getUser((Player) event.getWhoClicked());
 
-			if(!player.isObserver() && !event.getInventory().equals(player.getPlayer().getInventory())) {
+			if(player.isObserver() && !event.getInventory().equals(player.getPlayer().getInventory())) {
 				event.setCancelled(true);
 			}
 
@@ -184,12 +184,12 @@ public class PlayerListener implements Listener {
 
 	@EventHandler
 	public void onInventoryClose(InventoryCloseEvent event) {
-		if(event.getPlayer() instanceof Player == false) {
+		if(!(event.getPlayer() instanceof Player)) {
 			return;
 		}
 
 		User player = User.getUser((Player) event.getPlayer());
-		if(player.isObserver()) {
+		if(!player.isObserver()) {
 			return;
 		}
 

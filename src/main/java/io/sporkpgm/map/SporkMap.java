@@ -18,6 +18,7 @@ import io.sporkpgm.scoreboard.ScoreboardHandler;
 import io.sporkpgm.scoreboard.exceptions.IllegalScoreboardException;
 import io.sporkpgm.scoreboard.objective.ObjectiveScoreboard;
 import io.sporkpgm.user.User;
+import io.sporkpgm.util.ClassUtils;
 import io.sporkpgm.util.FileUtil;
 import io.sporkpgm.util.Log;
 import io.sporkpgm.util.SporkConfig.Settings;
@@ -158,7 +159,7 @@ public class SporkMap {
 	}
 
 	public TeamModule getWinner() {
-		for(TeamModule module : conditions.keySet()) {
+		for(TeamModule module : getConditions().keySet()) {
 			WinConditionSet set = conditions.get(module);
 			if(set.isCompleted()) {
 				return module;
@@ -190,6 +191,12 @@ public class SporkMap {
 	public void start() {
 		for(Module module : modules.getModules()) {
 			module.start();
+		}
+	}
+
+	public void stop() {
+		for(Module module : modules.getModules()) {
+			module.stop();
 		}
 	}
 

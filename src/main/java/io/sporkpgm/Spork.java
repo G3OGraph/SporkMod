@@ -15,10 +15,15 @@ import io.sporkpgm.commands.TeamCommands;
 import io.sporkpgm.listeners.*;
 import io.sporkpgm.map.SporkFactory;
 import io.sporkpgm.module.builder.BuilderFactory;
+import io.sporkpgm.module.modules.damage.DisableDamageBuilder;
+import io.sporkpgm.module.modules.damage.DisableDamageModule;
 import io.sporkpgm.module.modules.destroyable.DestroyableModule;
 import io.sporkpgm.module.modules.filter.Filter;
+import io.sporkpgm.module.modules.friendlyfire.FriendlyFireModule;
 import io.sporkpgm.module.modules.info.InfoModule;
+import io.sporkpgm.module.modules.itemremove.ItemRemoveModule;
 import io.sporkpgm.module.modules.kits.KitModule;
+import io.sporkpgm.module.modules.maxheight.MaxHeightModule;
 import io.sporkpgm.module.modules.mob.MobModule;
 import io.sporkpgm.module.modules.region.Region;
 import io.sporkpgm.module.modules.spawn.SpawnModule;
@@ -80,6 +85,10 @@ public class Spork extends JavaPlugin {
 		this.factory.register(SpawnModule.class);
 		this.factory.register(Filter.class);
 		this.factory.register(MobModule.class);
+		this.factory.register(DisableDamageModule.class);
+		this.factory.register(FriendlyFireModule.class);
+		this.factory.register(ItemRemoveModule.class);
+		this.factory.register(MaxHeightModule.class);
 		this.factory.register(DestroyableModule.class);
 		Log.debug("Loaded " + this.factory.getBuilders().size() + " Modules into the Factory");
 

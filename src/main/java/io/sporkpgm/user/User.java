@@ -31,6 +31,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -57,6 +58,7 @@ public class User implements Listener {
 		this.name = player.getName();
 		this.player = player;
 		this.attachment = getPlayer().addAttachment(Spork.get());
+		this.inventories = new HashMap<>();
 	}
 
 	public String getUUID() {
