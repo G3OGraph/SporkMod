@@ -1,6 +1,8 @@
 package io.sporkpgm.module.modules.team;
 
 import io.sporkpgm.map.SporkMap;
+import io.sporkpgm.module.ObjectiveModule;
+import io.sporkpgm.util.NumberUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +84,48 @@ public class TeamCollection {
 	public TeamModule getTeam(String search) {
 		List<TeamModule> teams = getTeams(search);
 		return (teams.size() > 0 ? teams.get(0) : null);
+	}
+
+	public List<TeamModule> getLowestTeams() {
+		List<TeamModule> teams = new ArrayList<>();
+
+		teams.add(this.teams.get(0));
+		int low = this.teams.get(0).getPlayers().size();
+
+		for(TeamModule team : this.teams) {
+			if(!teams.contains(team)) {
+				if(team.getPlayers().size() <= low) {
+					if(team.getPlayers().size() == low) {
+						teams.add(team);
+					} else {
+						teams = new ArrayList<>();
+						teams.add(team);
+					}
+				}
+			}
+		}
+
+		return teams;
+	}
+
+	public TeamModule getLowestTeam() {
+		List<TeamModule> teams = getLowestTeams();
+		if(teams.size() == 1)
+			return teams.get(0);
+		if(teams.size() == 0)
+			return null;
+
+		return teams.get(NumberUtil.getRandom(0, teams.size() - 1));
+	}
+
+	public List<ObjectiveModule> getObjectives(TeamModule module) {
+		List<ObjectiveModule> objectives = new ArrayList<>();
+		for(ObjectiveModule objective : map.getModules().getModules(ObjectiveModule.class)) {
+			if(objective.getTeam().equals(module)) {
+				objectives.add(objective);
+			}
+		}
+		return objectives;
 	}
 
 }

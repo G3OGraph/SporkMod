@@ -30,11 +30,6 @@ import org.bukkit.material.MaterialData;
 
 public class BlockListener implements Listener {
 
-	@EventHandler
-	public void onBlockChange(BlockChangeEvent event) {
-		event.setCancelled(false);
-	}
-
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onLowPriorityBlockChange(BlockChangeEvent event) {
 		event.setCancelled(false);

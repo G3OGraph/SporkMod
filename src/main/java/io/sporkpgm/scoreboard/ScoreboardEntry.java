@@ -59,6 +59,10 @@ public class ScoreboardEntry {
 		}
 		this.score.setScore(value);
 		set = true;
+
+		if(!scoreboard.getEntries().contains(this)) {
+			this.scoreboard.getEntries().add(this);
+		}
 	}
 
 	public void setValue(int... scores) {

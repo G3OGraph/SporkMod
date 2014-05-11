@@ -7,6 +7,11 @@ import com.sk89q.minecraft.util.commands.CommandUsageException;
 import com.sk89q.minecraft.util.commands.CommandsManager;
 import com.sk89q.minecraft.util.commands.MissingNestedCommandException;
 import com.sk89q.minecraft.util.commands.WrappedCommandException;
+import io.sporkpgm.commands.MapCommands;
+import io.sporkpgm.commands.MatchCommands;
+import io.sporkpgm.commands.MiscCommands;
+import io.sporkpgm.commands.RotationCommands;
+import io.sporkpgm.commands.TeamCommands;
 import io.sporkpgm.listeners.*;
 import io.sporkpgm.map.SporkFactory;
 import io.sporkpgm.module.builder.BuilderFactory;
@@ -99,6 +104,11 @@ public class Spork extends JavaPlugin {
 		};
 
 		this.registration = new CommandsManagerRegistration(this, this.commands);
+		this.registration.register(MapCommands.class);
+		this.registration.register(MatchCommands.class);
+		this.registration.register(MiscCommands.class);
+		this.registration.register(RotationCommands.class);
+		this.registration.register(TeamCommands.class);
 
 		registerListener(new BlockListener());
 		registerListener(new ConnectionListener());

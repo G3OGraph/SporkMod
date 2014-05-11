@@ -41,6 +41,8 @@ public class SporkMap {
 	private ScoreboardHandler scoreboard;
 
 	private World world;
+	private boolean ended;
+	private TeamModule winner;
 
 	public SporkMap(SporkLoader loader) {
 		this.loader = loader;
@@ -133,8 +135,31 @@ public class SporkMap {
 		return world;
 	}
 
+	public void setEnded(boolean ended) {
+		this.ended = ended;
+
+		if(this.winner == null) {
+			this.winner = getTeams().getObservers();
+		}
+
+	}
+
+	public boolean hasEnded() {
+		return ended;
+	}
+
+	public void checkEnded() {
+		if(!ended && getWinner() != null && !getWinner().isObservers()) {
+			setEnded(true);
+		}
+	}
+
 	public TeamModule getWinner() {
-		return null;
+		return winner;
+	}
+
+	public void setWinner(TeamModule winner) {
+		this.winner = winner;
 	}
 
 	public void start() {

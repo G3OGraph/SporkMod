@@ -164,6 +164,38 @@ public class TeamModule extends Module {
 		return null;
 	}
 
+	public boolean canJoin(User player) {
+		if(isObservers()) {
+			return true;
+		}
+
+		if(isClosed()) {
+			return false;
+		}
+
+		/*
+		if(size() >= getOverfill() && isCapped()) {
+			return player.getPlayer().hasPermission("manager.join.overflow");
+		} else if(size() >= getMax() && isCapped()) {
+			return player.getPlayer().hasPermission("manager.join.max");
+		}
+		*/
+
+		return true;
+	}
+
+	public String reasonJoin(User player, ChatColor colour) {
+		/*
+		if(size() >= getOverfill() && isCapped() && !player.getPlayer().hasPermission("manager.join.overflow")) {
+			return colour + "You can't join " + getColoredName() + colour + " because it has reached overflow capacity.";
+		} else if(size() >= getMax() && isCapped() && !player.getPlayer().hasPermission("manager.join.max")) {
+			return colour + "The teams on this map are full!";
+		}
+		*/
+
+		return "";
+	}
+
 	@Override
 	public String toString() {
 		return ClassUtils.build(this);

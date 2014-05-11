@@ -279,6 +279,10 @@ public class DestroyableModule extends ObjectiveModule implements Listener {
 		return getCompletionPercentage();
 	}
 
+	public int getMaxScore() {
+		return 100;
+	}
+
 	@Override
 	public String toString() {
 		return ClassUtils.build(this);

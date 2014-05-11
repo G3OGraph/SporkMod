@@ -6,4 +6,6 @@ public interface TourneyScore {
 
 	public int getScore();
 
+	public int getMaxScore();
+
 }

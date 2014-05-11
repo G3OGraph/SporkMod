@@ -253,7 +253,7 @@ public class User {
 	}
 
 	public boolean isObserver() {
-		return team.isObservers() || !Rotation.getSlot().getMatch().isRunning();
+		return team.isObservers() || !Rotation.getMatch().isRunning();
 	}
 
 	public Inventory getInventory() {
@@ -371,6 +371,10 @@ public class User {
 
 	public static List<User> getUsers() {
 		return users;
+	}
+
+	public static User getUser(String name) {
+		return getUser(Bukkit.getPlayer(name));
 	}
 
 	public static User getUser(Player player) {

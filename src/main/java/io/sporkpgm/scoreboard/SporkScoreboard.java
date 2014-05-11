@@ -125,7 +125,7 @@ public abstract class SporkScoreboard {
 	}
 
 	public ScoreboardEntry blank(int score) {
-		StringBuilder spaces = new StringBuilder(".");
+		StringBuilder spaces = new StringBuilder();
 		spaces.append(" ");
 
 		ScoreboardEntry sbEntry = getEntry(spaces.toString());

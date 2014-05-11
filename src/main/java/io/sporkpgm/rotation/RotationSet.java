@@ -14,6 +14,10 @@ public class RotationSet {
 		this.slots = slots;
 	}
 
+	public List<RotationSlot> getSlots() {
+		return slots;
+	}
+
 	public RotationSlot getCurrent() {
 		return slots.get(current);
 	}
@@ -41,7 +45,7 @@ public class RotationSet {
 	}
 
 	public RotationSlot setNext(SporkLoader loader, boolean force) {
-		if(isEnded() && !force) {
+		if(Rotation.get().isRestarting() && !force) {
 			return null;
 		}
 

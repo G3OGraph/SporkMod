@@ -8,6 +8,7 @@ import io.sporkpgm.scoreboard.objective.TeamObjective;
 import io.sporkpgm.tourney.TourneyScore;
 import io.sporkpgm.util.ClassUtils;
 import io.sporkpgm.util.Log;
+import org.bukkit.ChatColor;
 
 public abstract class ObjectiveModule extends Module implements TeamObjective, TourneyScore {
 
@@ -50,6 +51,10 @@ public abstract class ObjectiveModule extends Module implements TeamObjective, T
 	public void setComplete(boolean complete) {
 		this.complete = complete;
 		this.scoreboard.update();
+	}
+
+	public ChatColor getColor() {
+		return complete ? ChatColor.GREEN : ChatColor.RED;
 	}
 
 	@Override
