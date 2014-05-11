@@ -37,7 +37,7 @@ public class ServerCycling extends ServerPhase {
 		Rotation rotation = Rotation.get();
 		RotationSlot next = rotation.getNext();
 
-		next.load();
+		next.load(true);
 
 		this.next = next;
 		String what = getMessage();

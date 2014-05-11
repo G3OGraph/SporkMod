@@ -53,7 +53,7 @@ public class Rotation {
 	}
 
 	public void start() {
-		getCurrent().load();
+		getCurrent().load(false);
 	}
 
 	public int getID() {

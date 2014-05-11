@@ -39,20 +39,20 @@ public class RotationSlot {
 		return match;
 	}
 
-	public void load() {
+	public void load(boolean next) {
 		if(map != null) {
 			if(match == null) {
-				Log.debug("Loading " + Settings.prefix() + (Rotation.get().getID() + 1) + " (current: " + Settings.prefix() + Rotation.get().getID() + ")");
-				match = new Match(map, Rotation.get().getID() + 1);
+				Log.debug("Loading " + Settings.prefix() + (Rotation.get().getID() + (next ? 1 : 0)) + " (current: " + Settings.prefix() + Rotation.get().getID() + ")");
+				match = new Match(map, (Rotation.get().getID() + (next ? 1 : 0)));
 				map.load(match);
 			}
 
 			return;
 		}
 
-		Log.debug("Loading " + Settings.prefix() + (Rotation.get().getID() + 1) + " (current: " + Settings.prefix() + Rotation.get().getID() + ")");
+		Log.debug("Loading " + Settings.prefix() + (Rotation.get().getID() + (next ? 1 : 0)) + " (current: " + Settings.prefix() + Rotation.get().getID() + ")");
 		map = loader.build();
-		match = new Match(map, Rotation.get().getID() + 1);
+		match = new Match(map, (Rotation.get().getID() + (next ? 1 : 0)));
 		map.load(match);
 	}
 

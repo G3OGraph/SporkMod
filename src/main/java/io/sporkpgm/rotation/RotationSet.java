@@ -58,7 +58,7 @@ public class RotationSet {
 		slot = new RotationSlot(loader, true);
 		slots.add(current + 1, slot);
 		if(Rotation.get().getRotation().getCurrent().getMatch().getPhase() == MatchPhase.CYCLING) {
-			slot.load();
+			slot.load(true);
 		}
 
 		return slot;
