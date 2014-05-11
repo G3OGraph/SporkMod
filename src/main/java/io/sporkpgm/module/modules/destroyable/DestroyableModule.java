@@ -8,10 +8,12 @@ import io.sporkpgm.module.ObjectiveModule;
 import io.sporkpgm.module.modules.region.Region;
 import io.sporkpgm.module.modules.region.types.BlockRegion;
 import io.sporkpgm.module.modules.team.TeamModule;
+import io.sporkpgm.scoreboard.objective.ObjectiveScoreboard;
 import io.sporkpgm.user.User;
 import io.sporkpgm.util.ClassUtils;
 import io.sporkpgm.util.Log;
 import io.sporkpgm.util.StringUtil;
+import io.sporkpgm.win.WinCondition;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -34,7 +36,7 @@ public class DestroyableModule extends ObjectiveModule implements Listener {
 
 	public DestroyableModule(String name, TeamModule team, Region region, Material[] materials, int completion) {
 		super(name, team);
-		this.complete = false;
+		this.completed = false;
 		this.region = region;
 		this.materials = materials;
 		this.completion = completion;
@@ -80,8 +82,8 @@ public class DestroyableModule extends ObjectiveModule implements Listener {
 	}
 
 	@Override
-	public void setComplete(boolean complete) {
-		super.setComplete(complete);
+	public void setCompleted(boolean complete) {
+		super.setCompleted(complete);
 		if(!complete) {
 			return;
 		}
@@ -114,6 +116,7 @@ public class DestroyableModule extends ObjectiveModule implements Listener {
 		builder.append(StringUtil.listToEnglishCompound(toEnglish));
 
 		Bukkit.broadcastMessage(builder.toString());
+		map.getScoreboard().get(ObjectiveScoreboard.class).update();
 	}
 
 
@@ -135,7 +138,7 @@ public class DestroyableModule extends ObjectiveModule implements Listener {
 			return;
 		}
 
-		if(isComplete()) {
+		if(isCompleted()) {
 			return;
 		}
 
@@ -151,7 +154,7 @@ public class DestroyableModule extends ObjectiveModule implements Listener {
 		}
 
 		broken.setComplete(event.getPlayer(), true);
-		setComplete(getCompletionPercentage() >= completion);
+		setCompleted(getCompletionPercentage() >= completion);
 	}
 
 	@Override

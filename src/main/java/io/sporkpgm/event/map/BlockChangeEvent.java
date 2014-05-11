@@ -115,7 +115,6 @@ public class BlockChangeEvent extends Event {
 	}
 
 	public boolean setCancelled(boolean cancelled) {
-		Log.debug(5);
 		if(locked) {
 			return false;
 		}
@@ -133,7 +132,6 @@ public class BlockChangeEvent extends Event {
 
 		Cancellable cancel = (Cancellable) cause;
 		cancel.setCancelled(cancelled);
-
 		return true;
 	}
 

@@ -32,6 +32,8 @@ public class ServerCycling extends ServerPhase {
 	public void run() {
 		if(complete)
 			return;
+
+		// Log.debug((NumberUtil.randomBoolean() ? "tick" : "tock"));
 		Rotation rotation = Rotation.get();
 		RotationSlot next = rotation.getNext();
 

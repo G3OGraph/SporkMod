@@ -19,6 +19,7 @@ import io.sporkpgm.module.modules.destroyable.DestroyableModule;
 import io.sporkpgm.module.modules.filter.Filter;
 import io.sporkpgm.module.modules.info.InfoModule;
 import io.sporkpgm.module.modules.kits.KitModule;
+import io.sporkpgm.module.modules.mob.MobModule;
 import io.sporkpgm.module.modules.region.Region;
 import io.sporkpgm.module.modules.spawn.SpawnModule;
 import io.sporkpgm.module.modules.team.TeamModule;
@@ -78,6 +79,7 @@ public class Spork extends JavaPlugin {
 		this.factory.register(KitModule.class);
 		this.factory.register(SpawnModule.class);
 		this.factory.register(Filter.class);
+		this.factory.register(MobModule.class);
 		this.factory.register(DestroyableModule.class);
 		Log.debug("Loaded " + this.factory.getBuilders().size() + " Modules into the Factory");
 
@@ -113,7 +115,7 @@ public class Spork extends JavaPlugin {
 		registerListener(new BlockListener());
 		registerListener(new ConnectionListener());
 		registerListener(new FilterTriggerListener());
-		registerListener(new MapListener());
+		// registerListener(new MapListener());
 		registerListener(new PlayerListener());
 	}
 

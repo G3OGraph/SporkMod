@@ -8,6 +8,6 @@ public interface TeamObjective {
 
 	public TeamModule getTeam();
 
-	public boolean isComplete();
+	public boolean isCompleted();
 
 }

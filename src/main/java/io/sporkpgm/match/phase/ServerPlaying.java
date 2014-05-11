@@ -22,7 +22,6 @@ public class ServerPlaying extends ServerPhase {
 			return;
 		duration++;
 
-		/*
 		List<User> players = match.getMap().getPlayers();
 		if(duration % 5 == 0) {
 			for(User player : players) {
@@ -34,7 +33,6 @@ public class ServerPlaying extends ServerPhase {
 		if(match.getMap().hasEnded()) {
 			end();
 		}
-		*/
 	}
 
 	public void end() {

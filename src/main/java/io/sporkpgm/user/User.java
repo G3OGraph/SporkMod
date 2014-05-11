@@ -15,9 +15,11 @@ import io.sporkpgm.util.NMSUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -32,7 +34,7 @@ import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.Map;
 
-public class User {
+public class User implements Listener {
 
 	protected static List<User> users = new ArrayList<>();
 
@@ -106,8 +108,8 @@ public class User {
 
 		getPlayer().setDisplayName(team.getColor() + getPlayer().getName());
 
-		Log.debug("getTeam() is null: " + (getTeam() == null));
-		Log.debug("getTeam().getTeam() is null: " + (getTeam().getTeam() == null));
+		// Log.debug("getTeam() is null: " + (getTeam() == null));
+		// Log.debug("getTeam().getTeam() is null: " + (getTeam().getTeam() == null));
 		getTeam().getTeam().addPlayer(this);
 		getPlayer().setScoreboard(getTeam().getMap().getScoreboard().getMain().getScoreboard());
 
@@ -209,7 +211,9 @@ public class User {
 
 	public void teleport(SpawnModule spawn) {
 		try {
-			getPlayer().teleport(spawn.getSpawn());
+			Location location = spawn.getSpawn();
+			getPlayer().teleport(location);
+			Log.debug("Teleporting to " + location);
 		} catch(ConcurrentModificationException e) {
 			e.printStackTrace();
 			teleport(spawn);
@@ -307,6 +311,7 @@ public class User {
 		if(!users.contains(this)) {
 			UserAddEvent event = new UserAddEvent(this);
 			ListenerHandler.callEvent(event);
+			ListenerHandler.registerListener(this);
 			users.add(this);
 		}
 
@@ -317,6 +322,7 @@ public class User {
 		if(users.contains(this)) {
 			UserRemoveEvent event = new UserRemoveEvent(this);
 			ListenerHandler.callEvent(event);
+			ListenerHandler.unregisterListener(this);
 		}
 
 		users.remove(this);

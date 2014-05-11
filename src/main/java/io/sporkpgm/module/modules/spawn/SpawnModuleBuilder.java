@@ -82,9 +82,9 @@ public class SpawnModuleBuilder extends Builder {
 
 		String name = (nameS == null ? "noname" : nameS);
 
-		Log.debug("Map is null: " + (map == null));
-		Log.debug("Map.getTeams() is null: " + (map.getTeams() == null));
-		Log.debug("Map.getTeams().getTeam(" + '"' + teamS + '"' + ") is null: " + (map.getTeams().getTeam(teamS) == null));
+		// Log.debug("Map is null: " + (map == null));
+		// Log.debug("Map.getTeams() is null: " + (map.getTeams() == null));
+		// Log.debug("Map.getTeams().getTeam(" + '"' + teamS + '"' + ") is null: " + (map.getTeams().getTeam(teamS) == null));
 		TeamModule team = map.getTeams().getTeam(teamS);
 
 		List<Region> regions = RegionBuilder.parseSubRegions(element);

@@ -53,10 +53,8 @@ public class ScoreboardEntry {
 
 	public void setValue(boolean debug, int value) {
 		Preconditions.checkState(active, "Scoreboard Entry is inactive");
-		if(debug) {
-			Log.debug(7);
-			Log.info("Set value of '" + name + "' to " + value);
-		}
+		// Log.debug(7);
+		Log.debug("Set value of '" + name + "' to " + value);
 		this.score.setScore(value);
 		set = true;
 
@@ -85,18 +83,18 @@ public class ScoreboardEntry {
 	}
 
 	public void update(String name) {
-		Log.debug("Doing okay (nothing)");
+		// Log.debug("Doing okay (nothing)");
 		int value = getValue();
-		Log.debug("Doing okay (fetched value)");
+		// Log.debug("Doing okay (fetched value)");
 		remove();
-		Log.debug("Doing okay (removed)");
+		// Log.debug("Doing okay (removed)");
 		this.active = true;
 		this.name = name;
-		Log.debug("Doing okay (updated fields)");
+		// Log.debug("Doing okay (updated fields)");
 		score();
-		Log.debug("Doing okay (setup score)");
+		// Log.debug("Doing okay (setup score)");
 		setValue(false, value);
-		Log.debug("Doing okay (set score value)");
+		// Log.debug("Doing okay (set score value)");
 	}
 
 	protected void score() {

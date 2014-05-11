@@ -36,7 +36,7 @@ public class ScoreboardHandler {
 		this.main = main;
 	}
 
-	public <S> S get(Class<S> type) throws IllegalScoreboardException {
+	public <S> S get(Class<S> type) {
 		if(!SporkScoreboard.class.isAssignableFrom(type)) {
 			throw new IllegalScoreboardException(type);
 		}
@@ -45,7 +45,9 @@ public class ScoreboardHandler {
 			try {
 				type.cast(scoreboard);
 				return (S) scoreboard;
-			} catch(ClassCastException e) { /* nothing */ }
+			} catch(ClassCastException e) {
+				Log.debug("Could not cast " + scoreboard.getClass().getSimpleName() + " to " + type.getSimpleName());
+			}
 		}
 
 		try {
@@ -57,6 +59,7 @@ public class ScoreboardHandler {
 				team.register(scoreboard);
 			}
 
+			scoreboards.add(scoreboard);
 			return (S) scoreboard;
 		} catch(Exception e) {
 			throw new IllegalScoreboardException(e);

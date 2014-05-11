@@ -1,12 +1,9 @@
 package io.sporkpgm.listeners;
 
 import io.sporkpgm.ListenerHandler;
-import io.sporkpgm.Spork;
-import io.sporkpgm.event.map.BlockChangeEvent;
 import io.sporkpgm.event.user.PlayingUserMoveEvent;
 import io.sporkpgm.match.MatchPhase;
 import io.sporkpgm.rotation.Rotation;
-import io.sporkpgm.rotation.RotationSlot;
 import io.sporkpgm.user.User;
 import io.sporkpgm.util.Log;
 import org.bukkit.Material;
@@ -31,6 +28,7 @@ import org.bukkit.event.vehicle.VehicleEnterEvent;
 
 public class PlayerListener implements Listener {
 
+	/*
 	@EventHandler
 	public void onBlockChange(BlockChangeEvent event) {
 		if(!event.hasPlayer()) {
@@ -39,6 +37,7 @@ public class PlayerListener implements Listener {
 
 		event.setCancelled(event.getPlayer().isObserver());
 	}
+	*/
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerMove(PlayerMoveEvent event) {
@@ -133,7 +132,7 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		User player = User.getUser(event.getPlayer());
-		if(!player.isObserver()) {
+		if(player.isObserver()) {
 			event.setCancelled(true);
 		}
 

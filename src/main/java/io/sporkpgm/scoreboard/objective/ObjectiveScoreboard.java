@@ -58,9 +58,11 @@ public class ObjectiveScoreboard extends SporkScoreboard {
 	}
 
 	public void update() {
-		for(ScoreboardEntry entry : entries) {
-			if(entry instanceof UpdateableEntry) {
-				((UpdateableEntry) entry).update();
+		for(TeamModule team : teams.keySet()) {
+			getTeam(team).update();
+
+			for(ObjectiveModule objective : teams.get(team)) {
+				getObjective(objective).update();
 			}
 		}
 	}

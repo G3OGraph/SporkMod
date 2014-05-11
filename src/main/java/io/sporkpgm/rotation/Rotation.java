@@ -7,6 +7,7 @@ import io.sporkpgm.map.SporkLoader;
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.match.Match;
 import io.sporkpgm.rotation.exceptions.RotationLoadException;
+import io.sporkpgm.user.User;
 import io.sporkpgm.util.Config;
 import io.sporkpgm.util.Log;
 import io.sporkpgm.util.SporkConfig;
@@ -95,7 +96,17 @@ public class Rotation {
 		return restart || getNext() == null;
 	}
 
-	public void cycle() { /* complete later */ }
+	public void cycle() {
+		SporkMap current = getMap();
+		Match match = getMatch();
+		getRotation().cycle();
+		this.match++;
+		for(User user : User.getUsers()) {
+			user.setTeam(getMap().getTeams().getObservers(), false, true, true);
+		}
+
+		current.unload(match);
+	}
 
 	public static Rotation get() {
 		return instance;

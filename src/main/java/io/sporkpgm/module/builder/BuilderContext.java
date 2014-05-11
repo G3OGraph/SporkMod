@@ -99,7 +99,7 @@ public class BuilderContext {
 			}
 		}
 
-		Log.debug("Checking " + fields + " against " + available);
+		// Log.debug("Checking " + fields + " against " + available);
 
 		if(fields.size() != available.size()) {
 			return false;

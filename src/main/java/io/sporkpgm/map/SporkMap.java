@@ -21,6 +21,7 @@ import io.sporkpgm.user.User;
 import io.sporkpgm.util.FileUtil;
 import io.sporkpgm.util.Log;
 import io.sporkpgm.util.SporkConfig.Settings;
+import io.sporkpgm.win.WinConditionSet;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
@@ -28,7 +29,9 @@ import org.bukkit.event.Listener;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SporkMap {
 
@@ -43,6 +46,7 @@ public class SporkMap {
 	private World world;
 	private boolean ended;
 	private TeamModule winner;
+	private Map<TeamModule, WinConditionSet> conditions;
 
 	public SporkMap(SporkLoader loader) {
 		this.loader = loader;
@@ -141,7 +145,6 @@ public class SporkMap {
 		if(this.winner == null) {
 			this.winner = getTeams().getObservers();
 		}
-
 	}
 
 	public boolean hasEnded() {
@@ -155,11 +158,33 @@ public class SporkMap {
 	}
 
 	public TeamModule getWinner() {
-		return winner;
+		for(TeamModule module : conditions.keySet()) {
+			WinConditionSet set = conditions.get(module);
+			if(set.isCompleted()) {
+				return module;
+			}
+		}
+
+		return getTeams().getObservers();
 	}
 
 	public void setWinner(TeamModule winner) {
 		this.winner = winner;
+	}
+
+	public Map<TeamModule, WinConditionSet> getConditions() {
+		if(conditions == null) {
+			this.conditions = new HashMap<>();
+			for(TeamModule team : teams.getTeams()) {
+				this.conditions.put(team, new WinConditionSet());
+			}
+		}
+
+		return conditions;
+	}
+
+	public WinConditionSet getConditionSet(TeamModule team) {
+		return getConditions().get(team);
 	}
 
 	public void start() {
@@ -183,6 +208,7 @@ public class SporkMap {
 			return false;
 		}
 
+		Log.info("World for " + toString() + " is " + world.getName());
 		return true;
 	}
 
@@ -195,7 +221,10 @@ public class SporkMap {
 
 		this.world = null;
 		String name = Settings.prefix() + match.getID();
-		Bukkit.unloadWorld(name, false);
+		boolean success = Bukkit.unloadWorld(name, false);
+		if(!success) {
+			return false;
+		}
 
 		File dest = new File(Bukkit.getWorldContainer(), name);
 		FileUtil.delete(dest);
