@@ -57,7 +57,9 @@ public class RotationSlot {
 	}
 
 	public void unload() {
-		this.map.unload(match);
+		try {
+			this.map.unload(match);
+		} catch(NullPointerException e) { /* nothing */ }
 	}
 
 	public static Rotation get() {

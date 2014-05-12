@@ -37,8 +37,6 @@ public class VictoryModule extends ObjectiveModule implements Listener {
 	private BlockRegion place;
 
 	private User completer;
-	private boolean complete;
-
 	private List<String> touches;
 
 	public VictoryModule(String name, TeamModule team, DyeColor dye, ChatColor color, BlockRegion place) {
@@ -52,11 +50,6 @@ public class VictoryModule extends ObjectiveModule implements Listener {
 	@Override
 	public TeamModule getTeam() {
 		return team;
-	}
-
-	@Override
-	public boolean isCompleted() {
-		return complete;
 	}
 
 	@Override
@@ -161,7 +154,7 @@ public class VictoryModule extends ObjectiveModule implements Listener {
 
 	@Override
 	public String toString() {
-		return "VictoryModule{name=" + name + ",dye=" + dye.name() + ",color=" + color.name() + ",place=" + place.toString() + ",complete=" + complete + "}";
+		return "VictoryModule{name=" + name + ",dye=" + dye.name() + ",color=" + color.name() + ",place=" + place.toString() + ",complete=" + completed + "}";
 	}
 
 }

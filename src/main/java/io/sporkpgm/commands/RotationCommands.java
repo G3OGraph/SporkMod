@@ -8,6 +8,7 @@ import io.sporkpgm.map.SporkFactory;
 import io.sporkpgm.map.SporkLoader;
 import io.sporkpgm.rotation.Rotation;
 import io.sporkpgm.rotation.RotationSlot;
+import io.sporkpgm.util.Log;
 import io.sporkpgm.util.PaginatedResult;
 import io.sporkpgm.util.StringUtil;
 import org.bukkit.Bukkit;
@@ -37,16 +38,24 @@ public class RotationCommands {
 		result.display(sender, cmd.getInteger(0, 1));
 	}
 
-	@Command(aliases = {"setnext", "sn"}, desc = "Set the next map", usage = "[map]", min = 1)
+	@Command(aliases = {"setnext", "sn"}, desc = "Set the next map", usage = "[map]", flags = "f", min = 1)
 	@CommandPermissions("spork.match.setnext")
 	public static void setnext(CommandContext cmd, CommandSender sender) throws CommandException {
-		SporkLoader map = SporkFactory.getMap(cmd.getJoinedStrings(0));
+		String search = cmd.getJoinedStrings(0);
+		Log.debug(sender.getName() + " searches " + search);
+		if(cmd.hasFlag('f')) {
+			search = search.replace(" -f", "");
+			search = search.replace("-f", "");
+		}
+
+		SporkLoader map = SporkFactory.getMap(search);
 		if(map == null) {
 			sender.sendMessage(ChatColor.RED + "Could not find a map by that name");
 			return;
 		}
 
-		boolean req = Rotation.get().setNext(map, cmd.hasFlag('f')) != null;
+		Rotation.get().setRestart();
+		boolean req = Rotation.get().setNext(map, cmd.hasFlag('f')) == null;
 		if(!req) {
 			Bukkit.broadcastMessage(ChatColor.RED + sender.getName() + ChatColor.DARK_PURPLE + " set the next map to " + ChatColor.GOLD + map.getName());
 		} else {

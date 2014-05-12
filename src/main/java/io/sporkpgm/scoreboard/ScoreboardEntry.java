@@ -1,13 +1,16 @@
 package io.sporkpgm.scoreboard;
 
 import com.google.common.base.Preconditions;
+import com.sk89q.minecraft.util.commands.ChatColor;
 import io.sporkpgm.util.ClassUtils;
 import io.sporkpgm.util.Log;
 import io.sporkpgm.util.ScoreboardUtil;
 import io.sporkpgm.util.StringUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Team;
 
 import java.lang.reflect.Method;
 
@@ -18,6 +21,8 @@ public class ScoreboardEntry {
 
 	protected String name;
 	protected SporkScoreboard scoreboard;
+
+	protected Team team;
 	protected Score score;
 
 	public ScoreboardEntry(String name, SporkScoreboard scoreboard) {
@@ -105,19 +110,38 @@ public class ScoreboardEntry {
 	public void create() {
 		this.score = null;
 		Objective objective = scoreboard.getObjective();
-		String[] split = StringUtil.trim(name, 48, 3);
 
 		try {
 			Method getScore = Objective.class.getDeclaredMethod("getScore", String.class);
 			getScore.setAccessible(true);
-			this.score = (Score) getScore.invoke(objective, split[1]);
+			this.score = (Score) getScore.invoke(objective, name);
 		} catch(Exception e) {
 			// Log.exception(e);
 		}
 
 		if(score == null) {
 			try {
-				this.score = objective.getScore(Bukkit.getOfflinePlayer(split[1]));
+				String stripped = ChatColor.stripColor(name).trim();
+				String[] split = StringUtil.trim(name, 48, 3);
+
+				OfflinePlayer player = Bukkit.getOfflinePlayer(split[1]);
+				this.score = objective.getScore(player);
+
+				StringBuilder spaces = new StringBuilder();
+				boolean done = false;
+				while(!done) {
+					try {
+						this.team = objective.getScoreboard().registerNewTeam(StringUtil.trim(spaces.toString() + stripped, 16));
+						this.team.setPrefix(split[0]);
+						this.team.setDisplayName(name);
+						this.team.setSuffix(split[2]);
+						this.team.addPlayer(player);
+						done = true;
+					} catch(IllegalArgumentException e) {
+						spaces.append(" ");
+						Log.debug("'" + StringUtil.trim(spaces.toString() + stripped, 16) + "' is in use already!");
+					}
+				}
 			} catch(Exception e) {
 				Log.exception(e);
 			}

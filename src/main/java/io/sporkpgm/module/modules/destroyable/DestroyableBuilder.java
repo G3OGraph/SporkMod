@@ -100,7 +100,7 @@ public class DestroyableBuilder extends Builder {
 			other = map.getTeams().getTeam(team);
 		}
 
-		Region region = RegionBuilder.parseCuboid(element.getChildren().get(0));
+		Region region = RegionBuilder.parseRegion(element.getChildren().get(0));
 		TeamModule owner = other.getOpposite();
 
 		if(name == null) {

@@ -78,6 +78,7 @@ public class Rotation {
 
 	public RotationSlot getNext() {
 		RotationSlot next = getRotation().getNext();
+		Log.debug("Next map from RotationSet is " + (next != null ? next : "null"));
 		if(next != null) {
 			return next;
 		}
@@ -86,14 +87,22 @@ public class Rotation {
 		try {
 			set = getRotation(rotation + 1);
 		} catch(IndexOutOfBoundsException e) {
+			Log.debug("Current RotationSet is the last one");
 			return null;
 		}
 
+		Log.debug("set.getCurrent() is " + (set.getCurrent() != null ? set.getCurrent() : "null"));
 		return set.getCurrent();
 	}
 
+	public void setRestart() {
+		Log.debug("getNext() == " + (getNext() != null ? getNext() : "null"));
+		this.restart = getNext() == null;
+	}
+
 	public boolean isRestarting() {
-		return restart || getNext() == null;
+		Log.debug("isRestarting() == " + restart);
+		return restart;
 	}
 
 	public void cycle() {

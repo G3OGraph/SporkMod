@@ -64,10 +64,10 @@ public class SporkMap {
 			Log.exception(e);
 		}
 
+		this.scoreboard.register(teams.getObservers());
 		for(TeamModule team : teams.getTeams()) {
 			this.scoreboard.register(team);
 		}
-		this.scoreboard.register(teams.getObservers());
 
 		if(modules.getModules(ObjectiveModule.class).size() > 0) {
 			try {

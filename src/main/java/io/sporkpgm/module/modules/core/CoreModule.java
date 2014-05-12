@@ -35,13 +35,14 @@ public class CoreModule extends ObjectiveModule implements Listener {
 	private int leak;
 
 	private boolean touched;
-	private boolean completed;
+	private List<String> touches;
 
 	public CoreModule(String name, Material material, Region region, TeamModule team, int leak) {
 		super(name, team);
 		this.material = material;
 		this.region = region;
 		this.leak = leak;
+		this.touches = new ArrayList<>();
 	}
 
 	public Material getMaterial() {
@@ -145,9 +146,15 @@ public class CoreModule extends ObjectiveModule implements Listener {
 				event.setCancelled(true);
 				event.getPlayer().getPlayer().sendMessage(ChatColor.RED + "You can't leak your own core");
 			} else {
-				touched = true;
+				boolean show = !touches.contains(event.getPlayer().getUUID());
+				if(show) {
+					touches.add(event.getPlayer().getUUID());
+				} else {
+					return;
+				}
 
-				String message = team.getColor() + "[Team] " + ChatColor.AQUA + event.getPlayer().getName() + ChatColor.GRAY + " broke a peice of the " + ChatColor.RED + name;
+				touched = true;
+				String message = team.getColor() + "[Team] " + ChatColor.AQUA + event.getPlayer().getName() + ChatColor.GRAY + " broke a piece of the " + ChatColor.RED + name;
 				for(User user : team.getPlayers()) {
 					user.getPlayer().sendMessage(message);
 				}

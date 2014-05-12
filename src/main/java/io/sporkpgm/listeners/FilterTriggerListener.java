@@ -29,7 +29,7 @@ public class FilterTriggerListener implements Listener {
 			return;
 		}
 
-		apply(event, false);
+		apply(event, true);
 	}
 
 	@EventHandler(ignoreCancelled = true)
