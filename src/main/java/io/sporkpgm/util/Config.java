@@ -1,75 +1,99 @@
 package io.sporkpgm.util;
 
 import io.sporkpgm.Spork;
-import io.sporkpgm.Spork.StartupType;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.Level;
 
-public class Config {
+public class Config extends YamlConfiguration {
 
-	private static File configFile;
-	private static FileConfiguration config;
+	private JavaPlugin plugin;
+	private File file;
+	private String def;
 
-	public static void init() {
-		configFile = new File(Spork.get().getDataFolder(), "config.yml");
-		if(!configFile.exists())
-			Spork.get().saveResource("config.yml", true);
-
-		config = YamlConfiguration.loadConfiguration(configFile);
+	private Config(JavaPlugin plugin, File file, String def) {
+		this.plugin = plugin;
+		this.file = file;
+		this.def = def;
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <T> T get(String path) {
-		return (T) config.get(path);
-	}
-
-	@SuppressWarnings("unchecked")
-	private static <T> T get(String path, Object def) {
-		return (T) config.get(path, def);
-	}
-
-	public static void set(String path, Object value) {
-		config.set(path, value);
+	public boolean load() {
 		try {
-			config.save(configFile);
-		} catch(Exception e) {
-			e.printStackTrace();
+			load(file);
+			return true;
+		} catch(FileNotFoundException ex) {
+			/* nothing */
+		} catch(IOException | InvalidConfigurationException ex) {
+			Bukkit.getLogger().log(Level.SEVERE, "Cannot load " + file, ex);
 		}
+
+		return false;
 	}
 
-	public static class General {
-
-		public static final boolean DEBUG = get("settings.debug", false);
-
+	public boolean exists() {
+		return exists(null);
 	}
 
-	public static class Map {
+	public boolean exists(String reason) {
+		Log.debug("File does" + (!file.exists() ? "n't" : "") + " exist" + (reason != null ? " (" + reason + ")" : ""));
+		return file.exists();
+	}
 
-		public static final File DIRECTORY = new File((String) get("settings.maps.repository", "maps/"));
-		public static final StartupType STARTUP = StartupType.getType((String) get("settings.maps.startup", "all"));
-		
-		public static File getDirectory() {
-			if(!DIRECTORY.exists()) {
-				DIRECTORY.mkdirs();
+	public void reload() {
+		exists("About to load configuration");
+		load();
+		exists("About to load defaults");
+		if(!file.exists()) {
+			plugin.saveResource(def, false);
+			load();
+		}
+		exists("Loaded defaults");
+	}
+
+	public void save() {
+		if(file == null) {
+			return;
+		}
+
+		try {
+			save(file);
+		} catch(IOException e) {
+			try {
+				file.mkdirs();
+				file.delete();
+				save(file);
+			} catch(IOException ex) {
+				Log.exception(ex);
+				// Log.severe("Could not save config to " + file + " " + ex.getMessage());
 			}
-
-			return DIRECTORY;
 		}
-
 	}
 
-	public static class Rotation {
-
-		public static final File ROTATION = new File((String) get("settings.rotation.file", "rotation.txt"));
-
+	public static Config load(JavaPlugin plugin, File file, String def) {
+		Config config = new Config(plugin, file, def);
+		config.exists("Just created the Config object");
+		config.reload();
+		return config;
 	}
 
-	private static class Match {
+	public static Config load(JavaPlugin plugin, File file) {
+		return load(plugin, file, file.getName());
+	}
 
-		public static final String PREFIX = get("settings.match.prefix", "match-");
+	public static Config load(JavaPlugin plugin, String name, String def) {
+		return load(plugin, new File(plugin.getDataFolder(), name), def);
+	}
 
+	public static Config load(JavaPlugin plugin, String name) {
+		return load(plugin, new File(plugin.getDataFolder(), name));
 	}
 
 }

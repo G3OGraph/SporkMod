@@ -1,12 +1,13 @@
 package io.sporkpgm.listeners;
 
-import io.sporkpgm.filter.AppliedRegion;
-import io.sporkpgm.filter.exceptions.InvalidContextException;
-import io.sporkpgm.filter.other.Context;
+import io.sporkpgm.event.map.BlockChangeEvent;
+import io.sporkpgm.event.user.PlayingUserMoveEvent;
+import io.sporkpgm.module.modules.filter.AppliedRegion;
+import io.sporkpgm.module.modules.filter.exceptions.InvalidContextException;
+import io.sporkpgm.module.modules.filter.other.Context;
 import io.sporkpgm.map.SporkMap;
-import io.sporkpgm.map.event.BlockChangeEvent;
-import io.sporkpgm.player.event.PlayingPlayerMoveEvent;
-import io.sporkpgm.region.Region;
+import io.sporkpgm.module.modules.region.Region;
+import io.sporkpgm.rotation.Rotation;
 import io.sporkpgm.util.Log;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -28,7 +29,7 @@ public class FilterTriggerListener implements Listener {
 	}
 
 	@EventHandler(ignoreCancelled = true)
-	public void onPlayerMove(PlayingPlayerMoveEvent event) {
+	public void onPlayerMove(PlayingUserMoveEvent event) {
 		apply(event);
 	}
 
@@ -37,12 +38,12 @@ public class FilterTriggerListener implements Listener {
 	}
 
 	private void apply(Event event, boolean log) {
-		SporkMap map = SporkMap.getMap();
+		SporkMap map = Rotation.getMap();
 		if(log) {
 			Log.info("Checking Regions from '" + map.getName() + "'");
 		}
 
-		List<Region> regions = map.getRegions();
+		List<Region> regions = map.getRegions().getRegions();
 		if(log) {
 			Log.info("Found " + regions.size() + " regions to check");
 		}

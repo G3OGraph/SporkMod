@@ -1,90 +1,93 @@
 package io.sporkpgm.module.modules.info;
 
-import io.sporkpgm.map.SporkMap;
-import io.sporkpgm.module.Module;
 import io.sporkpgm.module.builder.Builder;
-import io.sporkpgm.module.exceptions.ModuleLoadException;
+import io.sporkpgm.module.builder.BuilderContext;
+import io.sporkpgm.module.builder.BuilderInfo;
+import io.sporkpgm.module.builder.BuilderResult;
+import io.sporkpgm.module.exceptions.ModuleBuildException;
 import io.sporkpgm.util.StringUtil;
-import io.sporkpgm.util.XMLUtil;
-import org.dom4j.Document;
-import org.dom4j.Element;
+import org.jdom2.Document;
+import org.jdom2.Element;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@BuilderInfo(result = BuilderResult.SINGLE)
 public class InfoBuilder extends Builder {
 
-	public InfoBuilder(Document document) {
-		super(document);
-	}
+	@Override
+	public InfoModule single(BuilderContext context) throws ModuleBuildException {
+		if(!context.only("document")) {
+			return null;
+		}
 
-	public InfoBuilder(SporkMap map) {
-		super(map);
-	}
-
-	public List<Module> build() throws ModuleLoadException {
-		List<Module> modules = new ArrayList<>();
-
+		Document document = context.getDocument();
 		Element root = document.getRootElement();
+
 		String name;
 		try {
-			name = root.element("name").getText();
+			name = root.getChild("name").getText();
 		} catch(NullPointerException ex) {
-			throw new ModuleLoadException("Map names can't be null");
+			throw new ModuleBuildException("Map names can't be null");
 		}
 
 		String version;
 		try {
-			version = root.element("version").getText();
+			version = root.getChild("version").getText();
 		} catch(NullPointerException ex) {
-			throw new ModuleLoadException("Map versions can't be null");
+			throw new ModuleBuildException("Map versions can't be null");
 		}
 
 		String objective;
 		try {
-			objective = root.element("objective").getText();
+			objective = root.getChild("objective").getText();
 		} catch(NullPointerException ex) {
-			throw new ModuleLoadException("Map objectives can't be null");
+			throw new ModuleBuildException("Map objectives can't be null");
 		}
 
 		List<String> rules = new ArrayList<>();
-		Element rulesElement = root.element("rules");
-		for(Element rule : XMLUtil.getElements(rulesElement, "rule")) {
-			rules.add(rule.getText());
-		}
-
-		List<Contributor> authors = new ArrayList<>();
-		Element authorsElement = root.element("authors");
-		for(Element author : XMLUtil.getElements(authorsElement, "author")) {
-			if(author.getText() == null)
-				continue;
-			authors.add(new Contributor(author.getText(), author.attributeValue("contribution")));
-		}
-
-		if(authors.size() == 0) {
-			throw new ModuleLoadException("Maps must have at least 1 author");
-		}
-
-		List<Contributor> contributors = new ArrayList<>();
-		Element contributorsElement = root.element("contributors");
-		if(contributorsElement != null) {
-			for(Element contributor : XMLUtil.getElements(contributorsElement, "contributor")) {
-				if(contributor.getText() == null)
-					continue;
-				contributors.add(new Contributor(contributor.getText(), contributor.attributeValue("contribution")));
+		Element rulesElement = root.getChild("rules");
+		if(rulesElement != null) {
+			for(Element rule : rulesElement.getChildren("rule")) {
+				rules.add(rule.getText());
 			}
 		}
 
-		int maxPlayers = 0;
-		Element teamsElement = document.getRootElement().element("teams");
-		for(Element team : XMLUtil.getElements(teamsElement, "team")) {
-			try {
-				maxPlayers += StringUtil.convertStringToInteger(team.attributeValue("max"));
-			} catch(Exception e) { /* nothing */ }
+		Element authorsElement = root.getChild("authors");
+		List<Contributor> authors = contributors(authorsElement, "author");
+
+		if(authors.size() == 0) {
+			throw new ModuleBuildException("Maps must have at least 1 author");
 		}
 
-		modules.add(new InfoModule(name, version, objective, rules, maxPlayers, authors, contributors));
-		return modules;
+		Element contributorsElement = root.getChild("contributors");
+		List<Contributor> contributors = contributors(contributorsElement, "contributor");
+
+		int maxPlayers = 0;
+		Element teamsElement = document.getRootElement().getChild("teams");
+		if(teamsElement != null) {
+			for(Element team : teamsElement.getChildren("team")) {
+				try {
+					maxPlayers += StringUtil.convertStringToInteger(team.getAttributeValue("max"));
+				} catch(Exception e) { /* nothing */ }
+			}
+		}
+
+		return new InfoModule(name, version, objective, rules, maxPlayers, authors, contributors);
+	}
+
+	private List<Contributor> contributors(Element element, String name) {
+		List<Contributor> contributors = new ArrayList<>();
+
+		if(element != null) {
+			for(Element contributor : element.getChildren(name)) {
+				if(contributor.getText() == null)
+					continue;
+				contributors.add(new Contributor(contributor.getText(), contributor.getAttributeValue("contribution")));
+			}
+		}
+
+		return contributors;
 	}
 
 }

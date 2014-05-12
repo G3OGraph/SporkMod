@@ -5,7 +5,6 @@ import io.sporkpgm.Spork;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@SuppressWarnings("ALL")
 public class Log {
 
 	private static Logger log;
@@ -16,21 +15,25 @@ public class Log {
 		Log.log = Spork.get().getLogger();
 	}
 
-	private static void log(Level lvl, String... msg) {
+	public static void log(Level lvl, String... msg) {
 		for(String s : msg)
 			log.log(lvl, s);
 	}
 
-	private static void log(String... msg) {
+	public static void log(String... msg) {
 		log(Level.INFO, msg);
 	}
 
-	private static void log(Exception e) {
+	public static void log(Exception e) {
 		e.printStackTrace();
 	}
 
 	public static void exception(Exception e) {
-		log(e);
+		if(debug) {
+			e.printStackTrace();
+		} else {
+			Log.warning(e.getMessage());
+		}
 	}
 
 	public static void info(String... msg) {
@@ -52,8 +55,7 @@ public class Log {
 
 	public static void setDebugging(boolean debug) {
 		Log.debug = debug;
-		if(debug)
-			log("Debugging on.");
+		log((debug ? "Enabled" : "Disabled") + " debugging.");
 	}
 
 }

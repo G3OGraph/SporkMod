@@ -1,40 +1,28 @@
 package io.sporkpgm.module.builder;
 
-import io.sporkpgm.map.SporkMap;
+import com.google.common.collect.Lists;
 import io.sporkpgm.module.Module;
-import io.sporkpgm.module.exceptions.ModuleLoadException;
-import io.sporkpgm.region.exception.InvalidRegionException;
-import org.dom4j.Document;
-import org.dom4j.Element;
+import io.sporkpgm.module.exceptions.ModuleBuildException;
 
 import java.util.List;
 
-public abstract class Builder {
+public class Builder {
 
-	protected SporkMap map;
-	protected Document document;
-
-	public Builder(Document document) {
-		this.document = document;
+	public Module single(BuilderContext context) throws ModuleBuildException {
+		return null;
 	}
 
-	public Builder(SporkMap map) {
-		this(map.getDocument());
-		this.map = map;
+	public Module[] array(BuilderContext context) throws ModuleBuildException {
+		return null;
 	}
 
-	public Element getRoot() {
-		return document.getRootElement();
-	}
+	public List<Module> list(BuilderContext context) throws ModuleBuildException {
+		Module[] array = array(context);
+		if(array == null) {
+			return null;
+		}
 
-	public abstract List<Module> build() throws ModuleLoadException, InvalidRegionException;
-
-	public BuilderAbout getInfo() {
-		return new BuilderAbout(getClass());
-	}
-
-	public static boolean isDocumentable(Class<? extends Builder> clazz) {
-		return new BuilderAbout(clazz).isDocumentable();
+		return Lists.newArrayList(array);
 	}
 
 }

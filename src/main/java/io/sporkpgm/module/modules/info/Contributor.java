@@ -2,8 +2,8 @@ package io.sporkpgm.module.modules.info;
 
 public class Contributor {
 
-	String username;
-	String contribution;
+	private String username;
+	private String contribution;
 
 	public Contributor(String username, String contribution) {
 		this.username = username;

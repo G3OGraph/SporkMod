@@ -1,5 +1,8 @@
 package io.sporkpgm.module;
 
+import io.sporkpgm.module.builder.Builder;
+import io.sporkpgm.module.builder.BuilderResult;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -9,7 +12,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ModuleInfo {
 
-	public abstract String name();
+	public Class<? extends Builder> builder();
 
 	public abstract String description();
 

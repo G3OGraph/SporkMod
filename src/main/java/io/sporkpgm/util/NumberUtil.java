@@ -21,121 +21,64 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-/**
- * Class to assist with parsing strings into numbers
- *
- * @author msalihov (Maxim Salikhov)
- */
 public class NumberUtil {
 
 	private static char[] allowed;
 
-	/**
-	 * Parses a string into an integer omitting any letters or other characters
-	 * in it
-	 */
 	public static Integer parseInteger(String s) {
-		allowed = "-1234567890".toCharArray();
-		StringBuilder allowedChars = new StringBuilder();
-		boolean negative = s.startsWith("-");
-		for(char c : s.toLowerCase().toCharArray()) {
-			for(char i : allowed) {
-				if(c == i) {
-					allowedChars.append(String.valueOf(c));
-				}
-			}
-		}
 		try {
-			if(negative) {
-				return Integer.parseInt(allowedChars.toString()) * -1;
-			} else {
-				return Integer.parseInt(allowedChars.toString());
-			}
+			return Integer.parseInt(s);
 		} catch(NumberFormatException ex) {
 			Log.severe("Could not parse string '" + s + "' to integer!");
 			return null;
 		}
 	}
 
-	/**
-	 * Parses a string into a double omitting any letters or other characters in
-	 * it
-	 */
+	public static int parseInteger(String s, int def) {
+		Integer result = parseInteger(s);
+		return result != null ? result : def;
+	}
+
 	public static Double parseDouble(String s) {
-		allowed = ".-1234567890".toCharArray();
-		StringBuilder allowedChars = new StringBuilder();
-		boolean negative = s.startsWith("-");
-		for(char c : s.toLowerCase().toCharArray()) {
-			for(char i : allowed) {
-				if(c == i) {
-					allowedChars.append(String.valueOf(c));
-				}
-			}
-		}
 		try {
-			if(negative) {
-				return Double.parseDouble(allowedChars.toString()) * -1;
-			} else {
-				return Double.parseDouble(allowedChars.toString());
-			}
+			return Double.parseDouble(s);
 		} catch(NumberFormatException ex) {
 			Log.severe("Could not parse string '" + s + "' to double!");
 			return null;
 		}
 	}
 
-	/**
-	 * Parses a string into a float omitting any letters (excluding f) or other
-	 * characters in it
-	 */
+	public static double parseDouble(String s, double def) {
+		Double result = parseDouble(s);
+		return result != null ? result : def;
+	}
+
 	public static Float parseFloat(String s) {
-		allowed = ".-1234567890f".toCharArray();
-		StringBuilder allowedChars = new StringBuilder();
-		boolean negative = s.startsWith("-");
-		for(char c : s.toLowerCase().toCharArray()) {
-			for(char i : allowed) {
-				if(c == i) {
-					allowedChars.append(String.valueOf(c));
-				}
-			}
-		}
 		try {
-			if(negative) {
-				return Float.parseFloat(allowedChars.toString()) * -1;
-			} else {
-				return Float.parseFloat(allowedChars.toString());
-			}
+			return Float.parseFloat(s);
 		} catch(NumberFormatException ex) {
 			Log.severe("Could not parse string '" + s + "' to float!");
 			return null;
 		}
 	}
 
-	/**
-	 * Parses a string into a long omitting any letters (excluding l) or other
-	 * characters in it
-	 */
+	public static float parseFloat(String s, float def) {
+		Float result = parseFloat(s);
+		return result != null ? result : def;
+	}
+
 	public static Long parseLong(String s) {
-		allowed = ".-1234567890l".toCharArray();
-		StringBuilder allowedChars = new StringBuilder();
-		boolean negative = s.startsWith("-");
-		for(char c : s.toLowerCase().toCharArray()) {
-			for(char i : allowed) {
-				if(c == i) {
-					allowedChars.append(String.valueOf(c));
-				}
-			}
-		}
 		try {
-			if(negative) {
-				return Long.parseLong(allowedChars.toString()) * -1;
-			} else {
-				return Long.parseLong(allowedChars.toString());
-			}
+			return Long.parseLong(s);
 		} catch(NumberFormatException ex) {
 			Log.severe("Could not parse string '" + s + "' to float!");
 			return null;
 		}
+	}
+
+	public static long parseLong(String s, long def) {
+		Long result = parseLong(s);
+		return result != null ? result : def;
 	}
 
 	public static int getRandom(int min, int max) {

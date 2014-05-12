@@ -2,8 +2,8 @@ package io.sporkpgm.match.phase;
 
 import io.sporkpgm.match.Match;
 import io.sporkpgm.match.MatchPhase;
-import io.sporkpgm.player.SporkPlayer;
-import io.sporkpgm.team.SporkTeam;
+import io.sporkpgm.module.modules.team.TeamModule;
+import io.sporkpgm.user.User;
 import io.sporkpgm.util.Chars;
 import org.bukkit.ChatColor;
 
@@ -22,9 +22,10 @@ public class ServerPlaying extends ServerPhase {
 			return;
 		duration++;
 
-		List<SporkPlayer> players = match.getMap().getPlayers();
+		/*
+		List<User> players = match.getMap().getPlayers();
 		if(duration % 5 == 0) {
-			for(SporkPlayer player : players) {
+			for(User player : players) {
 				player.updateInventory();
 			}
 		}
@@ -33,19 +34,20 @@ public class ServerPlaying extends ServerPhase {
 		if(match.getMap().hasEnded()) {
 			end();
 		}
+		*/
 	}
 
 	public void end() {
 		match.setPhase(MatchPhase.CYCLING);
 
-		for(SporkTeam team : match.getMap().getTeams())
-			for(SporkPlayer player : team.getPlayers())
-				player.setTeam(team, false, true, false);
-		match.getMap().stop();
+		for(User player : match.getMap().getPlayers()) {
+			player.setTeam(player.getTeam(), false, true, false);
+		}
+		// match.getMap().stop();
 
 		complete = true;
 
-		SporkTeam winner = match.getMap().getWinner();
+		TeamModule winner = match.getMap().getWinner();
 		String message = null;
 		if(winner != null && !winner.isObservers()) {
 			message = winner.getColoredName() + ChatColor.GOLD + " wins";

@@ -1,14 +1,13 @@
 package io.sporkpgm.match;
 
-import io.sporkpgm.Spork;
 import io.sporkpgm.map.SporkMap;
-import io.sporkpgm.match.event.MatchEndEvent;
-import io.sporkpgm.match.event.MatchPhaseChangeEvent;
-import io.sporkpgm.match.event.MatchStartEvent;
+import io.sporkpgm.event.match.MatchEndEvent;
+import io.sporkpgm.event.match.MatchPhaseChangeEvent;
+import io.sporkpgm.event.match.MatchStartEvent;
 import io.sporkpgm.match.phase.ServerCycling;
 import io.sporkpgm.match.phase.ServerPhase;
 import io.sporkpgm.match.phase.ServerStarting;
-import io.sporkpgm.rotation.RotationSlot;
+import io.sporkpgm.rotation.Rotation;
 import io.sporkpgm.util.SchedulerUtil;
 import io.sporkpgm.util.TimeUtil;
 import org.joda.time.DateTime;
@@ -18,7 +17,8 @@ import org.joda.time.Seconds;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("ALL")
+import static io.sporkpgm.ListenerHandler.*;
+
 public class Match {
 
 	private DateTime start;
@@ -85,7 +85,7 @@ public class Match {
 	public void setPhase(MatchPhase phase, int duration) {
 		if(phase == MatchPhase.CYCLING) {
 			MatchEndEvent end = new MatchEndEvent(this);
-			Spork.callEvent(end);
+			callEvent(end);
 		}
 
 		stop();
@@ -94,7 +94,7 @@ public class Match {
 		ServerPhase from = runnable;
 		ServerPhase to = phase.getPhase(this);
 		MatchPhaseChangeEvent event = new MatchPhaseChangeEvent(this, from, to);
-		Spork.callEvent(event);
+		callEvent(event);
 		this.phase = phase;
 		this.runnable = to;
 		this.schedule = new SchedulerUtil(runnable, false);
@@ -108,7 +108,7 @@ public class Match {
 
 		if(phase == MatchPhase.PLAYING) {
 			MatchStartEvent start = new MatchStartEvent(this);
-			Spork.callEvent(start);
+			callEvent(start);
 		}
 	}
 
@@ -174,7 +174,7 @@ public class Match {
 	}
 
 	public static Match getMatch() {
-		return RotationSlot.getRotation().getCurrentMatch();
+		return Rotation.get().getRotation().getCurrent().getMatch();
 	}
 
 	@Override

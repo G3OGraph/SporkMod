@@ -1,10 +1,12 @@
 package io.sporkpgm.listeners;
 
+import io.sporkpgm.ListenerHandler;
 import io.sporkpgm.Spork;
+import io.sporkpgm.event.map.BlockChangeEvent;
 import io.sporkpgm.map.SporkMap;
-import io.sporkpgm.map.event.BlockChangeEvent;
 import io.sporkpgm.match.Match;
-import io.sporkpgm.player.SporkPlayer;
+import io.sporkpgm.rotation.Rotation;
+import io.sporkpgm.user.User;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -44,12 +46,12 @@ public class BlockListener implements Listener {
 
 		SporkMap map = null;
 		try {
-			Match match = Spork.get().getRotation().getCurrentSlot().getMatch();
+			Match match = Rotation.getSlot().getMatch();
 			map = (match != null ? match.getMap() : null);
 		} catch(NullPointerException ignored) {
 		}
-		BlockChangeEvent change = new BlockChangeEvent(event, map, SporkPlayer.getPlayer(player), event.getBlockReplacedState(), event.getBlockPlaced().getState());
-		Spork.callEvent(change);
+		BlockChangeEvent change = new BlockChangeEvent(event, map, User.getUser(player), event.getBlockReplacedState(), event.getBlockPlaced().getState());
+		ListenerHandler.callEvent(change);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -58,7 +60,7 @@ public class BlockListener implements Listener {
 		Player player = event.getPlayer();
 		SporkMap map = null;
 		try {
-			Match match = Spork.get().getRotation().getCurrentSlot().getMatch();
+			Match match = Rotation.getSlot().getMatch();
 			map = (match != null ? match.getMap() : null);
 		} catch(NullPointerException ignored) {
 		}
@@ -66,8 +68,8 @@ public class BlockListener implements Listener {
 		BlockState newState = event.getBlock().getState();
 		newState.setData(new MaterialData(Material.AIR, (byte) 0));
 
-		BlockChangeEvent change = new BlockChangeEvent(event, map, SporkPlayer.getPlayer(player), event.getBlock().getState(), newState);
-		Spork.callEvent(change);
+		BlockChangeEvent change = new BlockChangeEvent(event, map, User.getUser(player), event.getBlock().getState(), newState);
+		ListenerHandler.callEvent(change);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -77,7 +79,7 @@ public class BlockListener implements Listener {
 		Block block = event.getBlockClicked().getRelative(event.getBlockFace());
 		SporkMap map = null;
 		try {
-			Match match = Spork.get().getRotation().getCurrentSlot().getMatch();
+			Match match = Rotation.getSlot().getMatch();
 			map = (match != null ? match.getMap() : null);
 		} catch(NullPointerException ignored) {
 		}
@@ -90,46 +92,46 @@ public class BlockListener implements Listener {
 		newState.setData(new MaterialData(update, (byte) 0));
 
 		BlockState oldState = block.getState();
-		BlockChangeEvent change = new BlockChangeEvent(event, map, SporkPlayer.getPlayer(player), oldState, newState);
-		Spork.callEvent(change);
+		BlockChangeEvent change = new BlockChangeEvent(event, map, User.getUser(player), oldState, newState);
+		ListenerHandler.callEvent(change);
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onBlockForm(BlockFormEvent event) {
 		SporkMap map = null;
 		try {
-			Match match = Spork.get().getRotation().getCurrentSlot().getMatch();
+			Match match = Rotation.getSlot().getMatch();
 			map = (match != null ? match.getMap() : null);
 		} catch(NullPointerException ignored) {
 		}
 
 		BlockChangeEvent change = new BlockChangeEvent(event, map, event.getBlock().getState(), event.getNewState());
-		Spork.callEvent(change);
+		ListenerHandler.callEvent(change);
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onBlockSpread(BlockSpreadEvent event) {
 		SporkMap map = null;
 		try {
-			Match match = Spork.get().getRotation().getCurrentSlot().getMatch();
+			Match match = Rotation.getSlot().getMatch();
 			map = (match != null ? match.getMap() : null);
 		} catch(NullPointerException ignored) {
 		}
 		BlockChangeEvent change = new BlockChangeEvent(event, map, event.getBlock().getState(), event.getNewState());
-		Spork.callEvent(change);
+		ListenerHandler.callEvent(change);
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onBlockFromTo(BlockFromToEvent event) {
 		SporkMap map = null;
 		try {
-			Match match = Spork.get().getRotation().getCurrentSlot().getMatch();
+			Match match = Rotation.getSlot().getMatch();
 			map = (match != null ? match.getMap() : null);
 		} catch(NullPointerException ignored) {
 		}
 		if(event.getToBlock().getType() != event.getBlock().getType()) {
 			BlockChangeEvent change = new BlockChangeEvent(event, map, event.getBlock().getState(), event.getToBlock().getState());
-			Spork.callEvent(change);
+			ListenerHandler.callEvent(change);
 		}
 	}
 
@@ -138,16 +140,16 @@ public class BlockListener implements Listener {
 	public void onEntityExplode(EntityExplodeEvent event) {
 		SporkMap map = null;
 		try {
-			Match match = Spork.get().getRotation().getCurrentSlot().getMatch();
+			Match match = Rotation.getSlot().getMatch();
 			map = (match != null ? match.getMap() : null);
 		} catch(NullPointerException ignored) {
 		}
 
-		SporkPlayer player = null;
+		User player = null;
 		if(event.getEntity() instanceof TNTPrimed) {
 			TNTPrimed tnt = (TNTPrimed) event.getEntity();
 			if(tnt.getSource() instanceof Player) {
-				player = SporkPlayer.getPlayer((Player) tnt.getSource());
+				player = User.getUser((Player) tnt.getSource());
 			}
 		}
 
@@ -155,7 +157,7 @@ public class BlockListener implements Listener {
 			BlockState newState = block.getState();
 			newState.setData(new MaterialData(Material.AIR, (byte) 0));
 			BlockChangeEvent change = new BlockChangeEvent(event, map, player, block.getState(), newState);
-			Spork.callEvent(change);
+			ListenerHandler.callEvent(change);
 		}
 	}
 
@@ -164,7 +166,7 @@ public class BlockListener implements Listener {
 	public void onBlockBurn(BlockBurnEvent event) {
 		SporkMap map = null;
 		try {
-			Match match = Spork.get().getRotation().getCurrentSlot().getMatch();
+			Match match = Rotation.getSlot().getMatch();
 			map = (match != null ? match.getMap() : null);
 		} catch(NullPointerException ignored) {
 		}
@@ -172,7 +174,7 @@ public class BlockListener implements Listener {
 		newState.setData(new MaterialData(Material.AIR, (byte) 0));
 
 		BlockChangeEvent change = new BlockChangeEvent(event, map, event.getBlock().getState(), newState);
-		Spork.callEvent(change);
+		ListenerHandler.callEvent(change);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -180,7 +182,7 @@ public class BlockListener implements Listener {
 	public void onBlockFade(BlockFadeEvent event) {
 		SporkMap map = null;
 		try {
-			Match match = Spork.get().getRotation().getCurrentSlot().getMatch();
+			Match match = Rotation.getSlot().getMatch();
 			map = (match != null ? match.getMap() : null);
 		} catch(NullPointerException ignored) {
 		}
@@ -188,7 +190,7 @@ public class BlockListener implements Listener {
 		newState.setData(new MaterialData(Material.AIR, (byte) 0));
 
 		BlockChangeEvent change = new BlockChangeEvent(event, map, event.getBlock().getState(), newState);
-		Spork.callEvent(change);
+		ListenerHandler.callEvent(change);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -196,7 +198,7 @@ public class BlockListener implements Listener {
 	public void onBlockPistonExtend(BlockPistonExtendEvent event) {
 		SporkMap map = null;
 		try {
-			Match match = Spork.get().getRotation().getCurrentSlot().getMatch();
+			Match match = Rotation.getSlot().getMatch();
 			map = (match != null ? match.getMap() : null);
 		} catch(NullPointerException ignored) {
 		}
@@ -204,7 +206,7 @@ public class BlockListener implements Listener {
 			BlockState newState = block.getRelative(event.getDirection()).getState();
 			newState.setData(new MaterialData(block.getType(), block.getData()));
 			BlockChangeEvent change = new BlockChangeEvent(event, map, block.getRelative(event.getDirection()).getState(), newState);
-			Spork.callEvent(change);
+			ListenerHandler.callEvent(change);
 		}
 	}
 
@@ -213,7 +215,7 @@ public class BlockListener implements Listener {
 	public void onBlockPistonRetract(BlockPistonRetractEvent event) {
 		SporkMap map = null;
 		try {
-			Match match = Spork.get().getRotation().getCurrentSlot().getMatch();
+			Match match = Rotation.getSlot().getMatch();
 			map = (match != null ? match.getMap() : null);
 		} catch(NullPointerException ignored) {
 		}
@@ -222,7 +224,7 @@ public class BlockListener implements Listener {
 			BlockState newState = state;
 			newState.setData(new MaterialData(Material.AIR, (byte) 0));
 			BlockChangeEvent change = new BlockChangeEvent(event, map, state, newState);
-			Spork.callEvent(change);
+			ListenerHandler.callEvent(change);
 		}
 	}
 

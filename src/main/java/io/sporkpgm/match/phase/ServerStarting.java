@@ -2,8 +2,8 @@ package io.sporkpgm.match.phase;
 
 import io.sporkpgm.match.Match;
 import io.sporkpgm.match.MatchPhase;
-import io.sporkpgm.player.SporkPlayer;
-import io.sporkpgm.team.SporkTeam;
+import io.sporkpgm.module.modules.team.TeamModule;
+import io.sporkpgm.user.User;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 
@@ -21,11 +21,14 @@ public class ServerStarting extends ServerPhase {
 	public void run() {
 		if(complete)
 			return;
-		List<SporkPlayer> players = match.getMap().getPlayers();
+
+		/*
+		List<User> players = match.getMap().getPlayers();
 		if(players.size() < 2) {
 			//match.setPhase(MatchPhase.WAITING);
 			//return;
 		}
+		*/
 
 		if(duration <= 0) {
 			broadcast(ChatColor.DARK_PURPLE + "# # # # # # # # # # # # # # # # ");
@@ -33,8 +36,8 @@ public class ServerStarting extends ServerPhase {
 			broadcast(ChatColor.DARK_PURPLE + "# # # # # # # # # # # # # # # #");
 			match.setPhase(MatchPhase.PLAYING);
 
-			for(SporkTeam team : match.getMap().getTeams())
-				for(SporkPlayer player : team.getPlayers())
+			for(TeamModule team : match.getMap().getTeams().getTeams())
+				for(User player : team.getPlayers())
 					player.setTeam(team, false, true, true);
 			match.getMap().start();
 
@@ -55,7 +58,7 @@ public class ServerStarting extends ServerPhase {
 		}
 
 		if(isFullSecond() && getSeconds() <= 3) {
-			for(SporkPlayer player : match.getMap().getPlayers()) {
+			for(User player : match.getMap().getPlayers()) {
 				Sound sound = Sound.NOTE_BASS;
 				if(getSeconds() == 0) {
 					sound = Sound.NOTE_PLING;

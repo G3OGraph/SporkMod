@@ -11,10 +11,10 @@ import org.bukkit.FireworkEffect.Type;
 
 public abstract class ServerPhase implements Runnable {
 
-	boolean complete;
-	int duration = 0;
-	Match match;
-	MatchPhase phase;
+	protected boolean complete;
+	protected int duration = 0;
+	protected Match match;
+	protected MatchPhase phase;
 
 	public Match getMatch() {
 		return match;

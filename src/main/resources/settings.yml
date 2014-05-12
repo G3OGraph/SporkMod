@@ -1,0 +1,8 @@
+settings:
+  folders:
+    repository:
+      path: 'maps/'
+  rotation:
+    file: 'rotation.txt'
+  match:
+    prefix: 'match-'
