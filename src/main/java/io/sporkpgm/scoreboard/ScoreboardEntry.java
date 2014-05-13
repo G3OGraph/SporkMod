@@ -59,7 +59,9 @@ public class ScoreboardEntry {
 	public void setValue(boolean debug, int value) {
 		Preconditions.checkState(active, "Scoreboard Entry is inactive");
 		// Log.debug(7);
-		Log.debug("Set value of '" + name + "' to " + value);
+		if(debug) {
+			Log.debug("Set value of '" + name + "' to " + value);
+		}
 		this.score.setScore(value);
 		set = true;
 
