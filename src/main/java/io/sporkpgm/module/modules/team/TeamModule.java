@@ -6,6 +6,7 @@ import io.sporkpgm.module.ModuleInfo;
 import io.sporkpgm.module.modules.spawn.SpawnModule;
 import io.sporkpgm.scoreboard.SporkTeam;
 import io.sporkpgm.user.User;
+import io.sporkpgm.util.ClassUtils;
 import io.sporkpgm.util.OtherUtil;
 import org.bukkit.ChatColor;
 
@@ -153,9 +154,51 @@ public class TeamModule extends Module {
 		this.team = team;
 	}
 
+	public TeamModule getOpposite() {
+		for(TeamModule team : map.getTeams().getTeams()) {
+			if(!team.equals(this) && !team.isObservers()) {
+				return team;
+			}
+		}
+
+		return null;
+	}
+
+	public boolean canJoin(User player) {
+		if(isObservers()) {
+			return true;
+		}
+
+		if(isClosed()) {
+			return false;
+		}
+
+		/*
+		if(size() >= getOverfill() && isCapped()) {
+			return player.getPlayer().hasPermission("manager.join.overflow");
+		} else if(size() >= getMax() && isCapped()) {
+			return player.getPlayer().hasPermission("manager.join.max");
+		}
+		*/
+
+		return true;
+	}
+
+	public String reasonJoin(User player, ChatColor colour) {
+		/*
+		if(size() >= getOverfill() && isCapped() && !player.getPlayer().hasPermission("manager.join.overflow")) {
+			return colour + "You can't join " + getColoredName() + colour + " because it has reached overflow capacity.";
+		} else if(size() >= getMax() && isCapped() && !player.getPlayer().hasPermission("manager.join.max")) {
+			return colour + "The teams on this map are full!";
+		}
+		*/
+
+		return "";
+	}
+
 	@Override
 	public String toString() {
-		return "TeamModule{name=" + name + ",color=" + color.name() + ",overhead=" + overhead.name() + ",max=" + max + ",overfill=" + overfill + "}";
+		return ClassUtils.build(this);
 	}
 
 }

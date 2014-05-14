@@ -15,9 +15,11 @@ import io.sporkpgm.util.NMSUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -29,10 +31,11 @@ import org.bukkit.potion.PotionEffectType;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class User {
+public class User implements Listener {
 
 	protected static List<User> users = new ArrayList<>();
 
@@ -46,10 +49,16 @@ public class User {
 	protected Map<Inventory, Inventory> inventories;
 
 	public User(Player player) {
-		this.uuid = Spork.getUUID(player.getName());
+		try {
+			this.uuid = player.getUniqueId().toString().replace("-", "");
+		} catch(Exception e) {
+			this.uuid = player.getName();
+		}
+
 		this.name = player.getName();
 		this.player = player;
 		this.attachment = getPlayer().addAttachment(Spork.get());
+		this.inventories = new HashMap<>();
 	}
 
 	public String getUUID() {
@@ -100,8 +109,11 @@ public class User {
 			teleport(spawn);
 
 		getPlayer().setDisplayName(team.getColor() + getPlayer().getName());
+
+		// Log.debug("getTeam() is null: " + (getTeam() == null));
+		// Log.debug("getTeam().getTeam() is null: " + (getTeam().getTeam() == null));
 		getTeam().getTeam().addPlayer(this);
-		// getPlayer().setScoreboard();
+		getPlayer().setScoreboard(getTeam().getMap().getScoreboard().getMain().getScoreboard());
 
 		return team;
 	}
@@ -201,7 +213,9 @@ public class User {
 
 	public void teleport(SpawnModule spawn) {
 		try {
-			getPlayer().teleport(spawn.getSpawn());
+			Location location = spawn.getSpawn();
+			getPlayer().teleport(location);
+			Log.debug("Teleporting to " + location);
 		} catch(ConcurrentModificationException e) {
 			e.printStackTrace();
 			teleport(spawn);
@@ -245,7 +259,7 @@ public class User {
 	}
 
 	public boolean isObserver() {
-		return team.isObservers() || !Rotation.getSlot().getMatch().isRunning();
+		return team.isObservers() || !Rotation.getMatch().isRunning();
 	}
 
 	public Inventory getInventory() {
@@ -255,7 +269,7 @@ public class User {
 
 	public void updateInventory() {
 		if(inventory == null) {
-			inventory = getPlayer().getServer().createInventory(null, 45, getTeam() + getName());
+			inventory = getPlayer().getServer().createInventory(null, 45, getTeam().getColor() + getName());
 		}
 
 		int health = getPlayer().getHealth() <= 0 ? 1 : (int) getPlayer().getHealth();
@@ -299,6 +313,7 @@ public class User {
 		if(!users.contains(this)) {
 			UserAddEvent event = new UserAddEvent(this);
 			ListenerHandler.callEvent(event);
+			ListenerHandler.registerListener(this);
 			users.add(this);
 		}
 
@@ -309,6 +324,7 @@ public class User {
 		if(users.contains(this)) {
 			UserRemoveEvent event = new UserRemoveEvent(this);
 			ListenerHandler.callEvent(event);
+			ListenerHandler.unregisterListener(this);
 		}
 
 		users.remove(this);
@@ -363,6 +379,10 @@ public class User {
 
 	public static List<User> getUsers() {
 		return users;
+	}
+
+	public static User getUser(String name) {
+		return getUser(Bukkit.getPlayer(name));
 	}
 
 	public static User getUser(Player player) {

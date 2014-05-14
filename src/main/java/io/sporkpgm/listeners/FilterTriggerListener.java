@@ -25,11 +25,19 @@ public class FilterTriggerListener implements Listener {
 		}
 		*/
 
-		apply(event, false);
+		if(event.hasPlayer() && event.getPlayer().isObserver()) {
+			return;
+		}
+
+		apply(event, true);
 	}
 
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerMove(PlayingUserMoveEvent event) {
+		if(event.getPlayer().isObserver()) {
+			return;
+		}
+
 		apply(event);
 	}
 

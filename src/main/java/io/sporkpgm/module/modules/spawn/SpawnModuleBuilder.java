@@ -22,17 +22,17 @@ public class SpawnModuleBuilder extends Builder {
 
 	@Override
 	public SpawnModule[] array(BuilderContext context) throws ModuleBuildException {
-		if(!context.only("map", "document")) {
+		if(!context.only("document", "loader", "map")) {
+			// Log.debug("SpawnModule: " + context.toString());
 			return null;
 		}
 
 		SporkMap map = context.getMap();
-		Log.debug("Map is null: " + (map == null));
-
 		List<SpawnModule> sporks = new ArrayList<>();
 		Document document = context.getDocument();
 		Element root = document.getRootElement();
 		sporks.addAll(spawns(map, root));
+		Log.debug("Found " + sporks.size() + " spawns");
 
 		return OtherUtil.toArray(SpawnModule.class, sporks);
 	}
@@ -82,9 +82,9 @@ public class SpawnModuleBuilder extends Builder {
 
 		String name = (nameS == null ? "noname" : nameS);
 
-		Log.debug("Map is null: " + (map == null));
-		Log.debug("Map.getTeams() is null: " + (map.getTeams() == null));
-		Log.debug("Map.getTeams().getTeam(" + '"' + teamS + '"' + ") is null: " + (map.getTeams().getTeam(teamS) == null));
+		// Log.debug("Map is null: " + (map == null));
+		// Log.debug("Map.getTeams() is null: " + (map.getTeams() == null));
+		// Log.debug("Map.getTeams().getTeam(" + '"' + teamS + '"' + ") is null: " + (map.getTeams().getTeam(teamS) == null));
 		TeamModule team = map.getTeams().getTeam(teamS);
 
 		List<Region> regions = RegionBuilder.parseSubRegions(element);

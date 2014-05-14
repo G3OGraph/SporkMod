@@ -24,6 +24,10 @@ public class ScoreboardHandler {
 		this.teams = new ArrayList<>();
 	}
 
+	public SporkMap getMap() {
+		return map;
+	}
+
 	public SporkScoreboard getMain() {
 		return (main != null ? main : scoreboards.get(0));
 	}
@@ -32,7 +36,7 @@ public class ScoreboardHandler {
 		this.main = main;
 	}
 
-	public <S> S get(Class<S> type) throws IllegalScoreboardException {
+	public <S> S get(Class<S> type) {
 		if(!SporkScoreboard.class.isAssignableFrom(type)) {
 			throw new IllegalScoreboardException(type);
 		}
@@ -41,7 +45,9 @@ public class ScoreboardHandler {
 			try {
 				type.cast(scoreboard);
 				return (S) scoreboard;
-			} catch(ClassCastException e) { /* nothing */ }
+			} catch(ClassCastException e) {
+				Log.debug("Could not cast " + scoreboard.getClass().getSimpleName() + " to " + type.getSimpleName());
+			}
 		}
 
 		try {
@@ -53,6 +59,7 @@ public class ScoreboardHandler {
 				team.register(scoreboard);
 			}
 
+			scoreboards.add(scoreboard);
 			return (S) scoreboard;
 		} catch(Exception e) {
 			throw new IllegalScoreboardException(e);
@@ -62,6 +69,8 @@ public class ScoreboardHandler {
 	public SporkTeam register(TeamModule module) {
 		for(SporkTeam team : teams) {
 			if(team.module.equals(module)) {
+				Log.debug("SporkTeam already exists for " + module.getName());
+				module.setTeam(team);
 				return team;
 			}
 		}
@@ -69,10 +78,10 @@ public class ScoreboardHandler {
 		try {
 			SporkTeam team = new SporkTeam(this, module);
 
+			module.setTeam(team);
 			this.teams.add(team);
 			for(SporkScoreboard scoreboard : scoreboards) {
 				team.register(scoreboard);
-				module.setTeam(team);
 			}
 
 			return team;

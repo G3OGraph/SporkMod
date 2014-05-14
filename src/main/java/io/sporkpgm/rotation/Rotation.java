@@ -7,6 +7,7 @@ import io.sporkpgm.map.SporkLoader;
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.match.Match;
 import io.sporkpgm.rotation.exceptions.RotationLoadException;
+import io.sporkpgm.user.User;
 import io.sporkpgm.util.Config;
 import io.sporkpgm.util.Log;
 import io.sporkpgm.util.SporkConfig;
@@ -32,6 +33,7 @@ public class Rotation {
 
 	public Rotation(List<SporkLoader> maps) {
 		instance = this;
+		rotations = new ArrayList<>();
 
 		int i = 0;
 		while(i < 30) {
@@ -51,7 +53,7 @@ public class Rotation {
 	}
 
 	public void start() {
-		getCurrent().load();
+		getCurrent().load(false);
 	}
 
 	public int getID() {
@@ -76,6 +78,7 @@ public class Rotation {
 
 	public RotationSlot getNext() {
 		RotationSlot next = getRotation().getNext();
+		Log.debug("Next map from RotationSet is " + (next != null ? next : "null"));
 		if(next != null) {
 			return next;
 		}
@@ -84,17 +87,35 @@ public class Rotation {
 		try {
 			set = getRotation(rotation + 1);
 		} catch(IndexOutOfBoundsException e) {
+			Log.debug("Current RotationSet is the last one");
 			return null;
 		}
 
+		Log.debug("set.getCurrent() is " + (set.getCurrent() != null ? set.getCurrent() : "null"));
 		return set.getCurrent();
 	}
 
-	public boolean isRestarting() {
-		return restart || getNext() == null;
+	public void setRestart() {
+		Log.debug("getNext() == " + (getNext() != null ? getNext() : "null"));
+		this.restart = getNext() == null;
 	}
 
-	public void cycle() { /* complete later */ }
+	public boolean isRestarting() {
+		Log.debug("isRestarting() == " + restart);
+		return restart;
+	}
+
+	public void cycle() {
+		SporkMap current = getMap();
+		Match match = getMatch();
+		getRotation().cycle();
+		this.match++;
+		for(User user : User.getUsers()) {
+			user.setTeam(getMap().getTeams().getObservers(), false, true, true);
+		}
+
+		current.unload(match);
+	}
 
 	public static Rotation get() {
 		return instance;

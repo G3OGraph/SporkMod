@@ -2,7 +2,7 @@ package io.sporkpgm.scoreboard.exceptions;
 
 import io.sporkpgm.scoreboard.SporkScoreboard;
 
-public class IllegalScoreboardException extends Exception {
+public class IllegalScoreboardException extends RuntimeException {
 
 	private static final long serialVersionUID = -2665242363957986177L;
 

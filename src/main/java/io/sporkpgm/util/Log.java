@@ -1,7 +1,9 @@
 package io.sporkpgm.util;
 
+import com.google.common.collect.Lists;
 import io.sporkpgm.Spork;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -46,6 +48,17 @@ public class Log {
 
 	public static void severe(String... msg) {
 		log(Level.SEVERE, msg);
+	}
+
+	public static void debug(int length) {
+		int start = 2;
+		int end = start + length;
+
+		List<StackTraceElement> trace = Lists.newArrayList(Thread.currentThread().getStackTrace());
+		List<StackTraceElement> print = trace.subList(start, (trace.size() > end ? end : trace.size() - 1));
+		for(StackTraceElement element : print) {
+			debug(element.toString());
+		}
 	}
 
 	public static void debug(String msg) {

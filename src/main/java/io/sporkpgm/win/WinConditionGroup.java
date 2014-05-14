@@ -11,13 +11,17 @@ public class WinConditionGroup implements WinCondition {
 		this.conditions = new ArrayList<>();
 	}
 
-	public boolean complete() {
+	public void addCondition(WinCondition condition) {
+		conditions.add(condition);
+	}
+
+	public boolean isCompleted() {
 		if(conditions.size() == 0) {
 			return false;
 		}
 
 		for(WinCondition condition : conditions) {
-			if(!condition.complete()) {
+			if(!condition.isCompleted()) {
 				return false;
 			}
 		}

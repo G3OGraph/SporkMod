@@ -10,6 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -19,7 +20,7 @@ public class ConnectionListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerJoin(final PlayerJoinEvent event) {
-		final User player = User.getUser(event.getPlayer());
+		final User player = new User(event.getPlayer()).add();
 		final TeamModule obs = Rotation.getMap().getTeams().getObservers();
 
 		player.setTeam(obs, false, false, false);

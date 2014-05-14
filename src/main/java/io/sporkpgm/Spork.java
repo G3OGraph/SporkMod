@@ -7,15 +7,29 @@ import com.sk89q.minecraft.util.commands.CommandUsageException;
 import com.sk89q.minecraft.util.commands.CommandsManager;
 import com.sk89q.minecraft.util.commands.MissingNestedCommandException;
 import com.sk89q.minecraft.util.commands.WrappedCommandException;
+import io.sporkpgm.commands.MapCommands;
+import io.sporkpgm.commands.MatchCommands;
+import io.sporkpgm.commands.MiscCommands;
+import io.sporkpgm.commands.RotationCommands;
+import io.sporkpgm.commands.TeamCommands;
 import io.sporkpgm.listeners.*;
 import io.sporkpgm.map.SporkFactory;
 import io.sporkpgm.module.builder.BuilderFactory;
+import io.sporkpgm.module.modules.core.CoreModule;
+import io.sporkpgm.module.modules.damage.DisableDamageBuilder;
+import io.sporkpgm.module.modules.damage.DisableDamageModule;
+import io.sporkpgm.module.modules.destroyable.DestroyableModule;
 import io.sporkpgm.module.modules.filter.Filter;
+import io.sporkpgm.module.modules.friendlyfire.FriendlyFireModule;
 import io.sporkpgm.module.modules.info.InfoModule;
+import io.sporkpgm.module.modules.itemremove.ItemRemoveModule;
 import io.sporkpgm.module.modules.kits.KitModule;
+import io.sporkpgm.module.modules.maxheight.MaxHeightModule;
+import io.sporkpgm.module.modules.mob.MobModule;
 import io.sporkpgm.module.modules.region.Region;
 import io.sporkpgm.module.modules.spawn.SpawnModule;
 import io.sporkpgm.module.modules.team.TeamModule;
+import io.sporkpgm.module.modules.victory.VictoryModule;
 import io.sporkpgm.rotation.Rotation;
 import io.sporkpgm.util.Config;
 import io.sporkpgm.util.Log;
@@ -72,7 +86,15 @@ public class Spork extends JavaPlugin {
 		this.factory.register(KitModule.class);
 		this.factory.register(SpawnModule.class);
 		this.factory.register(Filter.class);
-		Log.debug("Loaded Modules into the Factory");
+		this.factory.register(MobModule.class);
+		this.factory.register(DisableDamageModule.class);
+		this.factory.register(FriendlyFireModule.class);
+		this.factory.register(ItemRemoveModule.class);
+		this.factory.register(MaxHeightModule.class);
+		this.factory.register(DestroyableModule.class);
+		this.factory.register(VictoryModule.class);
+		this.factory.register(CoreModule.class);
+		Log.debug("Loaded " + this.factory.getBuilders().size() + " Modules into the Factory");
 
 		new SporkFactory();
 		for(File file : Maps.getFiles()) {
@@ -97,11 +119,16 @@ public class Spork extends JavaPlugin {
 		};
 
 		this.registration = new CommandsManagerRegistration(this, this.commands);
+		this.registration.register(MapCommands.class);
+		this.registration.register(MatchCommands.class);
+		this.registration.register(MiscCommands.class);
+		this.registration.register(RotationCommands.class);
+		this.registration.register(TeamCommands.class);
 
 		registerListener(new BlockListener());
 		registerListener(new ConnectionListener());
 		registerListener(new FilterTriggerListener());
-		registerListener(new MapListener());
+		// registerListener(new MapListener());
 		registerListener(new PlayerListener());
 	}
 

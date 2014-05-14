@@ -1,11 +1,9 @@
 package io.sporkpgm.listeners;
 
 import io.sporkpgm.ListenerHandler;
-import io.sporkpgm.Spork;
 import io.sporkpgm.event.user.PlayingUserMoveEvent;
 import io.sporkpgm.match.MatchPhase;
 import io.sporkpgm.rotation.Rotation;
-import io.sporkpgm.rotation.RotationSlot;
 import io.sporkpgm.user.User;
 import io.sporkpgm.util.Log;
 import org.bukkit.Material;
@@ -30,6 +28,17 @@ import org.bukkit.event.vehicle.VehicleEnterEvent;
 
 public class PlayerListener implements Listener {
 
+	/*
+	@EventHandler
+	public void onBlockChange(BlockChangeEvent event) {
+		if(!event.hasPlayer()) {
+			return;
+		}
+
+		event.setCancelled(event.getPlayer().isObserver());
+	}
+	*/
+
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerMove(PlayerMoveEvent event) {
 		User player = User.getUser(event.getPlayer());
@@ -49,7 +58,7 @@ public class PlayerListener implements Listener {
 		if(!player.isObserver())
 			return;
 
-		if(player.getPlayer().getLocation().getBlockY() <= 40) {
+		if(player.getPlayer().getLocation().getBlockY() <= -40) {
 			player.setTeam(player.getTeam(), false, false, true);
 		}
 	}
@@ -91,7 +100,7 @@ public class PlayerListener implements Listener {
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
 		User player = User.getUser(event.getPlayer());
 		player.updateInventory();
-		if(!player.isObserver()) {
+		if(player.isObserver()) {
 			event.setCancelled(true);
 		}
 	}
@@ -111,7 +120,7 @@ public class PlayerListener implements Listener {
 			User damager = User.getUser((Player) event.getDamager());
 			User victim = User.getUser((Player) event.getEntity());
 
-			if(!damager.isObserver()) {
+			if(damager.isObserver()) {
 				event.setCancelled(true);
 			} else {
 				victim.updateInventory();
@@ -123,7 +132,7 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		User player = User.getUser(event.getPlayer());
-		if(!player.isObserver()) {
+		if(player.isObserver()) {
 			event.setCancelled(true);
 		}
 
@@ -151,7 +160,7 @@ public class PlayerListener implements Listener {
 			User clicked = User.getUser((Player) event.getRightClicked());
 			Log.info(clicked.getName() + " has been right clicked by " + event.getPlayer().getName());
 
-			if(!player.isObserver()) {
+			if(player.isObserver()) {
 				event.getPlayer().openInventory(clicked.getInventory());
 				Log.info(clicked.getName() + " has had their inventory opened by " + event.getPlayer().getName());
 			}
@@ -163,7 +172,7 @@ public class PlayerListener implements Listener {
 		if(event.getWhoClicked() instanceof Player) {
 			User player = User.getUser((Player) event.getWhoClicked());
 
-			if(!player.isObserver() && !event.getInventory().equals(player.getPlayer().getInventory())) {
+			if(player.isObserver() && !event.getInventory().equals(player.getPlayer().getInventory())) {
 				event.setCancelled(true);
 			}
 
@@ -175,12 +184,12 @@ public class PlayerListener implements Listener {
 
 	@EventHandler
 	public void onInventoryClose(InventoryCloseEvent event) {
-		if(event.getPlayer() instanceof Player == false) {
+		if(!(event.getPlayer() instanceof Player)) {
 			return;
 		}
 
 		User player = User.getUser((Player) event.getPlayer());
-		if(player.isObserver()) {
+		if(!player.isObserver()) {
 			return;
 		}
 

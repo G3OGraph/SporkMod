@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.module.modules.region.types.BlockRegion;
 import io.sporkpgm.user.User;
+import io.sporkpgm.util.Log;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -131,7 +132,6 @@ public class BlockChangeEvent extends Event {
 
 		Cancellable cancel = (Cancellable) cause;
 		cancel.setCancelled(cancelled);
-
 		return true;
 	}
 

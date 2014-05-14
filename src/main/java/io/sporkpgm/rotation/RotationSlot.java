@@ -3,6 +3,8 @@ package io.sporkpgm.rotation;
 import io.sporkpgm.map.SporkLoader;
 import io.sporkpgm.map.SporkMap;
 import io.sporkpgm.match.Match;
+import io.sporkpgm.util.Log;
+import io.sporkpgm.util.SporkConfig.Settings;
 
 public class RotationSlot {
 
@@ -37,17 +39,27 @@ public class RotationSlot {
 		return match;
 	}
 
-	public void load() {
-		SporkMap map = loader.build();
-		Match match = new Match(map, Rotation.get().getID());
-		map.load(match);
+	public void load(boolean next) {
+		if(map != null) {
+			if(match == null) {
+				Log.debug("Loading " + Settings.prefix() + (Rotation.get().getID() + (next ? 1 : 0)) + " (current: " + Settings.prefix() + Rotation.get().getID() + ")");
+				match = new Match(map, (Rotation.get().getID() + (next ? 1 : 0)));
+				map.load(match);
+			}
 
-		this.map = map;
-		this.match = match;
+			return;
+		}
+
+		Log.debug("Loading " + Settings.prefix() + (Rotation.get().getID() + (next ? 1 : 0)) + " (current: " + Settings.prefix() + Rotation.get().getID() + ")");
+		map = loader.build();
+		match = new Match(map, (Rotation.get().getID() + (next ? 1 : 0)));
+		map.load(match);
 	}
 
 	public void unload() {
-		this.map.unload(match);
+		try {
+			this.map.unload(match);
+		} catch(NullPointerException e) { /* nothing */ }
 	}
 
 	public static Rotation get() {

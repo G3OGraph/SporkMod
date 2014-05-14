@@ -51,6 +51,11 @@ public class SporkConfig {
 			return config.getString("settings.match.prefix", "match-");
 		}
 
+		public static String api() {
+			Config config = Spork.get().getConfig();
+			return config.getString("settings.api.url", "http://ocn.parapengu.in:9015/");
+		}
+
 	}
 
 	public static class Rotation {
