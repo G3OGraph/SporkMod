@@ -35,7 +35,16 @@ public class UrlUtil {
 		}
 	}
 
-	public static JSONObject getAPI(String suffix) throws IOException, JSONException {
+	public static JSONObject getAPI(String suffix) {
+		try {
+			return getExceptionAPI(suffix);
+		} catch(Exception e) {
+			Log.exception(e);
+			return null;
+		}
+	}
+
+	public static JSONObject getExceptionAPI(String suffix) throws IOException, JSONException {
 		String api = Settings.api();
 		if(!api.startsWith("http://") && !api.startsWith("https://")) {
 			api = "http://";
