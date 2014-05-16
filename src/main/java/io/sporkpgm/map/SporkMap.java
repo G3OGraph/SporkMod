@@ -18,7 +18,6 @@ import io.sporkpgm.scoreboard.ScoreboardHandler;
 import io.sporkpgm.scoreboard.exceptions.IllegalScoreboardException;
 import io.sporkpgm.scoreboard.objective.ObjectiveScoreboard;
 import io.sporkpgm.user.User;
-import io.sporkpgm.util.ClassUtils;
 import io.sporkpgm.util.FileUtil;
 import io.sporkpgm.util.Log;
 import io.sporkpgm.util.SporkConfig.Settings;
