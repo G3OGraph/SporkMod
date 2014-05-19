@@ -97,7 +97,7 @@ public class PlayerListener implements Listener {
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
 		User player = User.getUser(event.getPlayer());
 		player.updateInventory();
