@@ -13,6 +13,7 @@ import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -96,7 +97,7 @@ public class PlayerListener implements Listener {
 		event.setCancelled(true);
 	}
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
 		User player = User.getUser(event.getPlayer());
 		player.updateInventory();
@@ -194,6 +195,15 @@ public class PlayerListener implements Listener {
 		}
 
 		player.close(event.getInventory());
+	}
+	
+	@EventHandler
+	public void onObserverDeath(PlayerDeathEvent e) {
+		User user = User.getUser(e.getEntity());
+	        if (user.isObserver()) {
+	            e.getDrops().clear();
+	            e.setDroppedExp(0);
+	        }
 	}
 
 }
