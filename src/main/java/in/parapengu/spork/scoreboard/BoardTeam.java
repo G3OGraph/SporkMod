@@ -10,6 +10,8 @@ public class BoardTeam {
 	private TeamModule module;
 	private List<Team> teams;
 
+
+
 	public BoardTeam(TeamModule module) {
 		this.module = module;
 	}

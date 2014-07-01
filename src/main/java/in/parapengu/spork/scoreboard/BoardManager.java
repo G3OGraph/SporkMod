@@ -1,10 +1,13 @@
 package in.parapengu.spork.scoreboard;
 
+import com.google.common.collect.Lists;
 import in.parapengu.spork.map.SporkMap;
+import in.parapengu.spork.scoreboard.boards.Board;
 import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.ScoreboardManager;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BoardManager {
@@ -29,7 +32,11 @@ public class BoardManager {
 		return manager;
 	}
 
-	public Board getBoard(ScoreboardType type) {
+	public List<Board> getBoards() {
+		return Lists.newArrayList(scoreboards.values());
+	}
+
+	public Board getBoard(BoardType type) {
 		return getBoard(type.getKey());
 	}
 
@@ -37,7 +44,7 @@ public class BoardManager {
 		return scoreboards.get(key);
 	}
 
-	public Board create(ScoreboardType type) {
+	public Board create(BoardType type) {
 		return create(type.getKey());
 	}
 
@@ -45,6 +52,16 @@ public class BoardManager {
 		Board board = new Board(manager.getNewScoreboard());
 		scoreboards.put(key, board);
 		return board;
+	}
+
+	public void add(BoardEntry entry) {
+
+	}
+
+	public void refresh() {
+		for(Board board : getBoards()) {
+			board.refresh();
+		}
 	}
 
 }

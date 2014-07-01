@@ -1,5 +1,6 @@
-package in.parapengu.spork.scoreboard;
+package in.parapengu.spork.scoreboard.objective;
 
+import in.parapengu.spork.scoreboard.BoardEntry;
 import in.parapengu.spork.util.Chars;
 
 public class BoardObjective extends BoardEntry {
