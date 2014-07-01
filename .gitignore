@@ -24,3 +24,5 @@ META-INF/application.xml
 git.sh
 copy.sh
 do.sh
+
+build.sh
