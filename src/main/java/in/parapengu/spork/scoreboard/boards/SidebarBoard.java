@@ -50,4 +50,30 @@ public class SidebarBoard extends Board {
 		}
 	}
 
+	@Override
+	public void refresh(BoardEntry entry) {
+		super.refresh(entry);
+	}
+
+	@Override
+	public void remove(String name) {
+		Score score = getScore(name);
+		if(score == null) {
+			return;
+		}
+
+		try {
+			Scoreboard.class.getMethod("resetScores", String.class);
+			scoreboard.resetScores(name);
+		} catch(NoSuchMethodException ex) {
+			scoreboard.resetScores(Bukkit.getOfflinePlayer(name));
+		}
+	}
+
+	@Override
+	public void remove(BoardEntry entry) {
+		entries.remove(entry);
+		entry.remove(this);
+	}
+
 }

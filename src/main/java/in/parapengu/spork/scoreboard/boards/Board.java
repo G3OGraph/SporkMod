@@ -34,4 +34,8 @@ public class Board {
 
 	public void refresh(BoardEntry entry) { /* nothing */ }
 
+	public void remove(String name) { /* nothing */ }
+
+	public void remove(BoardEntry entry) { /* nothing */ }
+
 }

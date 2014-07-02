@@ -10,6 +10,7 @@ import org.bukkit.scoreboard.ScoreboardManager;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class BoardManager {
 
@@ -57,6 +58,12 @@ public class BoardManager {
 
 	public void add(BoardEntry entry) {
 		entry.register(this);
+	}
+
+	public void remove(BoardEntry entry) {
+		for(Entry<String, Board> en : scoreboards.entrySet()) {
+			en.getValue().remove(entry);
+		}
 	}
 
 	public void refresh() {
