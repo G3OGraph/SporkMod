@@ -1,12 +1,14 @@
 package in.parapengu.spork.scoreboard.boards;
 
 import in.parapengu.spork.module.modules.team.TeamModule;
+import in.parapengu.spork.scoreboard.entry.BoardEntry;
+import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 public class Board {
 
-	private Scoreboard scoreboard;
+	protected Scoreboard scoreboard;
 
 	public Board(Scoreboard scoreboard) {
 		this.scoreboard = scoreboard;
@@ -20,15 +22,16 @@ public class Board {
 
 	}
 
-	public Team register(String name) {
-		Team team = scoreboard.getTeam(name);
-		if(team != null) {
-			return team;
-		}
+	public Team getTeam(String name) {
+		return null;
+	}
 
-		return scoreboard.registerNewTeam("name");
+	public Score getScore(String name) {
+		return null;
 	}
 
 	public void refresh() { /* nothing */ }
+
+	public void refresh(BoardEntry entry) { /* nothing */ }
 
 }

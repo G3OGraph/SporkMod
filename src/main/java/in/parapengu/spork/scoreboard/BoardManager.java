@@ -3,6 +3,7 @@ package in.parapengu.spork.scoreboard;
 import com.google.common.collect.Lists;
 import in.parapengu.spork.map.SporkMap;
 import in.parapengu.spork.scoreboard.boards.Board;
+import in.parapengu.spork.scoreboard.entry.BoardEntry;
 import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.ScoreboardManager;
 
@@ -55,7 +56,7 @@ public class BoardManager {
 	}
 
 	public void add(BoardEntry entry) {
-
+		entry.register(this);
 	}
 
 	public void refresh() {

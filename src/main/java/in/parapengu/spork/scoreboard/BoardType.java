@@ -1,6 +1,5 @@
 package in.parapengu.spork.scoreboard;
 
-import in.parapengu.spork.scoreboard.boards.BlankBoard;
 import in.parapengu.spork.scoreboard.boards.Board;
 import in.parapengu.spork.scoreboard.boards.SidebarBoard;
 import in.parapengu.spork.util.Log;
@@ -10,7 +9,6 @@ import java.lang.reflect.Constructor;
 
 public enum BoardType {
 
-	NO_SIDEBAR("no-sidebar", BlankBoard.class),
 	SIDEBAR("sidebar", SidebarBoard.class),
 	OTHER("other", Board.class);
 
