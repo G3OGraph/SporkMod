@@ -1,24 +1,23 @@
 package in.parapengu.spork.map;
 
 import com.google.common.collect.Lists;
-import in.parapengu.spork.Spork;
 import in.parapengu.spork.exception.map.MapLoadException;
 import in.parapengu.spork.map.features.Contributor;
 import in.parapengu.spork.match.Match;
-import in.parapengu.spork.module.Module;
 import in.parapengu.spork.module.ModuleCollection;
-import in.parapengu.spork.module.builder.BuildPhase;
-import in.parapengu.spork.module.builder.BuilderContext;
 import in.parapengu.spork.module.modules.team.TeamModule;
 import in.parapengu.spork.util.FileUtil;
 import in.parapengu.spork.util.Log;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.WorldCreator;
+import org.bukkit.generator.ChunkGenerator;
 import org.jdom2.Document;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 public class SporkMap {
 
@@ -91,6 +90,9 @@ public class SporkMap {
 
 	public boolean load(Match match) throws MapLoadException {
 		String name = MATCH_STYLE.replace("{id}", match.getId() + "");
+		if(Bukkit.getWorld(name) != null) {
+			Bukkit.unloadWorld(name, false);
+		}
 
 		File destination = new File(Bukkit.getServer().getWorldContainer(), name);
 		if(destination.exists()) {
@@ -122,7 +124,19 @@ public class SporkMap {
 			}
 		}
 
+		WorldCreator creator = new WorldCreator(name);
+		creator.generator(new ChunkGenerator() {
+			@Override
+			public byte[] generate(World world, Random random, int x, int z) {
+				return new byte[65536];
+			}
+		});
+		world = creator.createWorld();
 		return true;
+	}
+
+	public void unload() {
+		world = null;
 	}
 
 }
