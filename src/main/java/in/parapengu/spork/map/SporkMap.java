@@ -11,11 +11,13 @@ import in.parapengu.spork.module.builder.BuildPhase;
 import in.parapengu.spork.module.builder.BuilderContext;
 import in.parapengu.spork.module.modules.team.TeamModule;
 import in.parapengu.spork.util.FileUtil;
+import in.parapengu.spork.util.Log;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.jdom2.Document;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class SporkMap {
@@ -110,6 +112,13 @@ public class SporkMap {
 			File dest = new File(destination, file);
 			if(!src.exists() && required) {
 				throw new MapLoadException(this, "Required file '" + file + "' does not exist");
+			}
+
+			try {
+				FileUtil.copy(src, dest);
+			} catch(IOException ex) {
+				Log.exception(ex);
+				throw new MapLoadException(this, ex);
 			}
 		}
 

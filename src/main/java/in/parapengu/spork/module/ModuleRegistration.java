@@ -3,6 +3,7 @@ package in.parapengu.spork.module;
 import in.parapengu.spork.exception.module.ModuleBuildException;
 import in.parapengu.spork.module.builder.Builder;
 import in.parapengu.spork.module.builder.BuilderInfo;
+import in.parapengu.spork.module.builder.ModuleBuilder;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -30,12 +31,12 @@ public class ModuleRegistration {
 	}
 
 	public Builder getBuilder(Class<? extends Module> module) throws ModuleBuildException {
-		ModuleInfo info = module.getAnnotation(ModuleInfo.class);
+		ModuleBuilder info = module.getAnnotation(ModuleBuilder.class);
 		if(info == null) {
 			throw new ModuleBuildException(module, "ModuleInfo was not present");
 		}
 
-		Class<?> clazz = info.builder();
+		Class<?> clazz = info.value();
 		Constructor<?> constructor = clazz.getDeclaredConstructors()[0];
 		constructor.setAccessible(true);
 

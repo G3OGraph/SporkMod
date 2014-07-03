@@ -18,8 +18,11 @@ public class Board {
 		return scoreboard;
 	}
 
-	public void register(TeamModule team) {
-
+	public Team getTeam(TeamModule team) {
+		Team sbTeam = scoreboard.registerNewTeam(team.getName().toLowerCase().replace(" ", "-"));
+		sbTeam.setDisplayName(team.getColor() + team.getName());
+		sbTeam.setPrefix(team.getOverheadColor() + "");
+		return sbTeam;
 	}
 
 	public Team getTeam(String name) {

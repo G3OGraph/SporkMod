@@ -1,4 +1,4 @@
-package in.parapengu.spork.module;
+package in.parapengu.spork.module.builder;
 
 import in.parapengu.spork.module.builder.Builder;
 
@@ -9,8 +9,8 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ModuleInfo {
+public @interface ModuleBuilder {
 
-	public Class<? extends Builder> builder();
+	Class<? extends Builder> value();
 
 }

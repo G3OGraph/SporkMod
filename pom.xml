@@ -10,7 +10,7 @@
 
 	<properties>
 		<plugin.name>SporkPGM</plugin.name>
-		<plugin.mainClass>io.sporkpgm.Spork</plugin.mainClass>
+		<plugin.mainClass>in.parapengu.spork.Spork</plugin.mainClass>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 

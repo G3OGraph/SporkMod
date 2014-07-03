@@ -1,5 +1,6 @@
 package in.parapengu.spork.player;
 
+import in.parapengu.spork.module.modules.team.TeamModule;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ public class PlayerData {
 
 	private Player player;
 	private UUID uuid;
+	private TeamModule team;
 
 	public PlayerData(Player player) {
 		this.player = player;
@@ -24,6 +26,14 @@ public class PlayerData {
 
 	public UUID getUUID() {
 		return uuid;
+	}
+
+	public TeamModule getTeam() {
+		return team;
+	}
+
+	public void setTeam(TeamModule team) {
+		this.team = team;
 	}
 
 	public boolean add() {

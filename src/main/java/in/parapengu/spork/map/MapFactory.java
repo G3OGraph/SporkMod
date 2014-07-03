@@ -1,6 +1,7 @@
 package in.parapengu.spork.map;
 
 import in.parapengu.spork.exception.map.MapCreateException;
+import in.parapengu.spork.exception.map.MapLoadException;
 import in.parapengu.spork.map.features.Contributor;
 import in.parapengu.spork.util.Log;
 import org.jdom2.Document;
@@ -28,15 +29,17 @@ public class MapFactory {
 			return;
 		}
 
-		MapLoader loader = null;
+		MapLoader loader;
 		try {
 			loader = map(folder);
 		} catch(MapCreateException ex) {
 			Log.exception(ex);
+			return;
 		}
 
 		if(loader != null) {
 			loaders.add(loader);
+			Log.info("Successfully loaded " + loader.getName() + " Version " + loader.getVersion());
 			return;
 		}
 
@@ -46,11 +49,11 @@ public class MapFactory {
 				continue;
 			}
 
-			load(folder);
+			load(file);
 		}
 	}
 
-	public MapLoader load(File folder, Document document) {
+	public MapLoader load(File folder, Document document) throws MapLoadException {
 		Element root = document.getRootElement();
 
 		String name = root.getChildText("name");
@@ -58,13 +61,19 @@ public class MapFactory {
 		String objective = root.getChildText("objective");
 		List<Contributor> authors = contributions(root, "author");
 		List<Contributor> contributors = contributions(root, "contributor");
+		List<String> rules = new ArrayList<>();
+		if(root.getChild("rules") != null) {
+			for(Element child : root.getChild("rules").getChildren("rule")) {
+				rules.add(child.getText());
+			}
+		}
 
 		// name isn't null
 		// version isn't null
 		// objective isn't null
 		// authors isn't empty
 
-		return new MapLoader(folder, document, name, version, objective, authors, contributors);
+		return new MapLoader(folder, document, name, version, objective, authors, contributors, rules);
 	}
 
 	public List<Contributor> contributions(Element root, String name) {

@@ -2,16 +2,21 @@ package in.parapengu.spork;
 
 import in.parapengu.spork.exception.module.ModuleBuildException;
 import in.parapengu.spork.listeners.ConnectionListener;
+import in.parapengu.spork.map.MapFactory;
 import in.parapengu.spork.module.ModuleFactory;
 import in.parapengu.spork.module.ModuleRegistration;
+import in.parapengu.spork.module.modules.team.TeamModule;
 import in.parapengu.spork.util.Log;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
 
 public class Spork extends JavaPlugin {
 
 	private static Spork instance;
 
 	private ModuleFactory factory;
+	private MapFactory maps;
 
 	@Override
 	public void onLoad() {
@@ -21,7 +26,7 @@ public class Spork extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		ModuleRegistration registration = new ModuleRegistration();
-		// registration.register(TeamModule.class);
+		registration.register(TeamModule.class);
 
 		try {
 			factory = new ModuleFactory(registration);
@@ -30,6 +35,9 @@ public class Spork extends JavaPlugin {
 		}
 
 		getServer().getPluginManager().registerEvents(new ConnectionListener(), this);
+
+		maps = new MapFactory();
+		maps.load(new File("maps"));
 	}
 
 	@Override
@@ -45,4 +53,8 @@ public class Spork extends JavaPlugin {
 		return instance.factory;
 	}
 
+	public static MapFactory getMaps() {
+		return instance.maps;
+	}
+	
 }

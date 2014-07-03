@@ -9,6 +9,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BuilderInfo {
 
-	public BuildPhase phase();
+	BuildPhase value();
+
+	boolean required() default false;
 
 }

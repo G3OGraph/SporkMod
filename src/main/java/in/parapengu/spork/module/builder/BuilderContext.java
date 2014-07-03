@@ -3,6 +3,7 @@ package in.parapengu.spork.module.builder;
 import in.parapengu.spork.map.SporkMap;
 import in.parapengu.spork.match.Match;
 import org.jdom2.Document;
+import org.jdom2.Element;
 
 public class BuilderContext {
 
@@ -21,6 +22,10 @@ public class BuilderContext {
 
 	public Document getDocument() {
 		return document;
+	}
+
+	public Element getRoot() {
+		return document.getRootElement();
 	}
 
 	public SporkMap getMap() {

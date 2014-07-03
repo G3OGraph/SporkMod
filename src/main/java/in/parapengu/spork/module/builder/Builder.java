@@ -1,6 +1,8 @@
 package in.parapengu.spork.module.builder;
 
 import com.google.common.collect.Lists;
+import in.parapengu.spork.exception.module.ModuleBuildException;
+import in.parapengu.spork.exception.module.ModuleLoadException;
 import in.parapengu.spork.module.Module;
 
 import java.util.ArrayList;
@@ -8,24 +10,26 @@ import java.util.List;
 
 public class Builder<M extends Module> {
 
+	protected Class<M> module;
+
 	public boolean isPhase(BuilderContext context) {
 		BuilderInfo info = getClass().getAnnotation(BuilderInfo.class);
-		return context.getPhase() == info.phase();
+		return context.getPhase() == info.value();
 	}
 
-	public M single(BuilderContext context) {
+	public M single(BuilderContext context) throws ModuleLoadException {
 		return null;
 	}
 
-	public M[] array(BuilderContext context) {
+	public M[] array(BuilderContext context) throws ModuleLoadException {
 		return null;
 	}
 
-	public List<M> list(BuilderContext context) {
+	public List<M> list(BuilderContext context) throws ModuleLoadException {
 		return null;
 	}
 
-	public List<M> build(BuilderContext context) {
+	public List<M> build(BuilderContext context) throws ModuleLoadException {
 		List<M> list = new ArrayList<>();
 		if(isPhase(context)) {
 			return list;
@@ -50,6 +54,10 @@ public class Builder<M extends Module> {
 		}
 
 		return list;
+	}
+
+	public Class<M> getModule() {
+		return module;
 	}
 
 }
