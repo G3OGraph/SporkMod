@@ -21,6 +21,7 @@ public class Spork extends JavaPlugin {
 	@Override
 	public void onLoad() {
 		instance = this;
+		Log.setDebug(true);
 	}
 
 	@Override
@@ -56,5 +57,5 @@ public class Spork extends JavaPlugin {
 	public static MapFactory getMaps() {
 		return instance.maps;
 	}
-	
+
 }
