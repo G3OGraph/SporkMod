@@ -7,6 +7,7 @@ import in.parapengu.spork.module.modules.region.builder.RegionParser;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @ParserInfo({"block", "point"})
@@ -145,7 +146,7 @@ public class BlockRegion extends RegionModule {
 
 		@Override
 		public List<BlockRegion> parse(ParsingContext context) {
-			return null;
+			return new ArrayList<>();
 		}
 
 	}

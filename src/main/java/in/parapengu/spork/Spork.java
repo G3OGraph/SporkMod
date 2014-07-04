@@ -5,6 +5,7 @@ import in.parapengu.spork.listeners.ConnectionListener;
 import in.parapengu.spork.map.MapFactory;
 import in.parapengu.spork.module.ModuleFactory;
 import in.parapengu.spork.module.ModuleRegistration;
+import in.parapengu.spork.module.modules.region.RegionModule;
 import in.parapengu.spork.module.modules.team.TeamModule;
 import in.parapengu.spork.util.Log;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,6 +29,7 @@ public class Spork extends JavaPlugin {
 	public void onEnable() {
 		ModuleRegistration registration = new ModuleRegistration();
 		registration.register(TeamModule.class);
+		registration.register(RegionModule.class);
 
 		try {
 			factory = new ModuleFactory(registration);
