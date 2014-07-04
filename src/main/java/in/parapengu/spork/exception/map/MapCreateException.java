@@ -9,6 +9,7 @@ public class MapCreateException extends Exception {
 	private static final long serialVersionUID = 1482787630528188112L;
 
 	private String reason;
+	private Exception exception;
 
 	public MapCreateException(MapLoader loader, String reason) {
 		super("Failed to load " + loader.getName() + ": " + reason);
@@ -17,6 +18,7 @@ public class MapCreateException extends Exception {
 
 	public MapCreateException(MapLoader loader, Exception exception) {
 		this(loader, exception.getClass().getSimpleName() + (exception.getMessage() == null || exception.getMessage().length() <= 0 ? "" : ": " + exception.getMessage()));
+		this.exception = exception;
 	}
 
 	public MapCreateException(File folder, String reason) {
@@ -26,10 +28,20 @@ public class MapCreateException extends Exception {
 
 	public MapCreateException(File folder, Exception exception) {
 		this(folder, exception.getClass().getSimpleName() + (exception.getMessage() == null || exception.getMessage().length() <= 0 ? "" : ": " + exception.getMessage()));
+		this.exception = exception;
 	}
 
 	public String getReason() {
 		return reason;
+	}
+
+	@Override
+	public void printStackTrace() {
+		if(exception != null) {
+			exception.printStackTrace();
+		} else {
+			super.printStackTrace();
+		}
 	}
 
 }
