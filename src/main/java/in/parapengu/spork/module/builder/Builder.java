@@ -25,7 +25,7 @@ public class Builder<M extends Module> {
 		return null;
 	}
 
-	public List<M> list(BuilderContext context) throws ModuleLoadException {
+	public List<? extends M> list(BuilderContext context) throws ModuleLoadException {
 		return null;
 	}
 
@@ -47,7 +47,7 @@ public class Builder<M extends Module> {
 			return list;
 		}
 
-		List<M> modules = list(context);
+		List<? extends M> modules = list(context);
 		if(modules != null && modules.size() > 0) {
 			list = Lists.newArrayList(modules);
 			return list;
