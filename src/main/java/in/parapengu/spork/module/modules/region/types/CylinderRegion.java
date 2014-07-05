@@ -7,6 +7,7 @@ import in.parapengu.spork.module.modules.region.builder.ParserInfo;
 import in.parapengu.spork.module.modules.region.builder.ParsingContext;
 import in.parapengu.spork.module.modules.region.builder.RegionParser;
 import in.parapengu.spork.util.ParsingUtil;
+import org.bukkit.Location;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
@@ -34,7 +35,10 @@ public class CylinderRegion extends RegionModule {
 			return false;
 		}
 
-		double distance = region.getLocation().distance(base.getLocation());
+		Location location = region.getLocation();
+		location.setY(region.getY());
+
+		double distance = location.distance(base.getLocation());
 		return distance <= radius;
 	}
 
