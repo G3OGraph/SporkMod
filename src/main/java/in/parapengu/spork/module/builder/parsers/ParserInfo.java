@@ -1,4 +1,4 @@
-package in.parapengu.spork.module.modules.region.builder;
+package in.parapengu.spork.module.builder.parsers;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

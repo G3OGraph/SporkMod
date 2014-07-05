@@ -1,4 +1,4 @@
-package in.parapengu.spork.module.modules.region.builder;
+package in.parapengu.spork.module.builder.parsers;
 
 import in.parapengu.spork.map.SporkMap;
 import in.parapengu.spork.module.modules.region.RegionModule;
