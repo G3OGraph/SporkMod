@@ -9,11 +9,8 @@ import in.parapengu.spork.module.modules.region.builder.RegionParser;
 import in.parapengu.spork.util.ParsingUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
 
 import java.util.List;
-import java.util.Map;
 
 @ParserInfo({"block", "point"})
 public class BlockRegion extends RegionModule {
@@ -153,26 +150,7 @@ public class BlockRegion extends RegionModule {
 		@Override
 		public List<BlockRegion> parse(ParsingContext context) throws ModuleParsingException {
 			String name = context.getElement().getAttributeValue("name");
-			Map<String, String> points = ParsingUtil.parse(context.getElement().getText());
-			if(points == null) {
-				String message;
-				if(context.getElement().getText() == null) {
-					message = "No points were specified in " + new XMLOutputter(Format.getPrettyFormat()).outputString(context.getElement());
-				} else {
-					message = "Invalid points specified in \"" + context.getElement().getText() + "\"";
-				}
-
-				throw new ModuleParsingException(BlockRegion.class, message);
-			}
-
-			BlockRegion region;
-			try {
-				region = new BlockRegion(name, points.get("x"), points.containsKey("y") ? points.get("y") : "oo", points.get("z"));
-			} catch(NumberFormatException ex) {
-				throw new ModuleParsingException(BlockRegion.class, ex);
-			}
-
-			return Lists.newArrayList(region);
+			return Lists.newArrayList(ParsingUtil.parse(name, context.getElement(), context.getElement().getText()));
 		}
 
 	}

@@ -10,6 +10,8 @@ import in.parapengu.spork.module.builder.BuilderInfo;
 import in.parapengu.spork.module.modules.region.builder.ParsingContext;
 import in.parapengu.spork.module.modules.region.builder.RegionParser;
 import in.parapengu.spork.module.modules.region.types.BlockRegion.BlockParser;
+import in.parapengu.spork.module.modules.region.types.CuboidRegion.CuboidParser;
+import in.parapengu.spork.module.modules.region.types.RectangleRegion.RectangleParser;
 import in.parapengu.spork.util.Log;
 import org.jdom2.Element;
 
@@ -24,6 +26,8 @@ public class RegionBuilder extends Builder<RegionModule> {
 	static {
 		parsers = new ArrayList<>();
 		parsers.add(new BlockParser());
+		parsers.add(new CuboidParser());
+		parsers.add(new RectangleParser());
 	}
 
 	public RegionBuilder() {
