@@ -12,6 +12,12 @@ public class Builder<M extends Module> {
 
 	protected Class<M> module;
 
+	public Builder() {}
+
+	protected Builder(Class<M> module) {
+		this.module = module;
+	}
+
 	public boolean isPhase(BuilderContext context) {
 		BuilderInfo info = getClass().getAnnotation(BuilderInfo.class);
 		return context.getPhase() == info.value();

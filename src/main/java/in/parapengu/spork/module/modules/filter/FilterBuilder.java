@@ -1,6 +1,9 @@
 package in.parapengu.spork.module.modules.filter;
 
+import in.parapengu.spork.exception.module.ModuleLoadException;
 import in.parapengu.spork.module.builder.BuildPhase;
+import in.parapengu.spork.module.builder.Builder;
+import in.parapengu.spork.module.builder.BuilderContext;
 import in.parapengu.spork.module.builder.BuilderInfo;
 import in.parapengu.spork.module.builder.parsers.Parser;
 import in.parapengu.spork.module.modules.region.RegionParser;
@@ -16,16 +19,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @BuilderInfo(BuildPhase.LOAD)
-public class FilterBuilder extends Parser<FilterModule, FilterParser> {
-
-	private static List<FilterParser> parsers;
-
-	static {
-		parsers = new ArrayList<>();
-	}
+public class FilterBuilder extends Builder<FilterModule> {
 
 	public FilterBuilder() {
-		super("filters", parsers, FilterModule.class);
+		super(FilterModule.class);
+	}
+
+	@Override
+	public List<? extends FilterModule> list(BuilderContext context) throws ModuleLoadException {
+		return super.list(context);
 	}
 
 }
