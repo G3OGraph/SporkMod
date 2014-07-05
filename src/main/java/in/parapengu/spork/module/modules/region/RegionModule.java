@@ -8,8 +8,18 @@ import org.bukkit.Location;
 @ModuleBuilder(RegionBuilder.class)
 public abstract class RegionModule extends Module {
 
+	private String name;
+
+	public RegionModule(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
 	public boolean isInside(Location location) {
-		return isInside(new BlockRegion(location.getX(), location.getY(), location.getZ()));
+		return isInside(new BlockRegion(null, location.getX(), location.getY(), location.getZ()));
 	}
 
 	public abstract boolean isInside(BlockRegion region);

@@ -2,6 +2,7 @@ package in.parapengu.spork.module.modules.region;
 
 import com.google.common.collect.Lists;
 import in.parapengu.spork.exception.module.ModuleLoadException;
+import in.parapengu.spork.exception.region.ModuleParsingException;
 import in.parapengu.spork.module.builder.BuildPhase;
 import in.parapengu.spork.module.builder.Builder;
 import in.parapengu.spork.module.builder.BuilderContext;
@@ -9,6 +10,7 @@ import in.parapengu.spork.module.builder.BuilderInfo;
 import in.parapengu.spork.module.modules.region.builder.ParsingContext;
 import in.parapengu.spork.module.modules.region.builder.RegionParser;
 import in.parapengu.spork.module.modules.region.types.BlockRegion.BlockParser;
+import in.parapengu.spork.util.Log;
 import org.jdom2.Element;
 
 import java.util.ArrayList;
@@ -51,7 +53,11 @@ public class RegionBuilder extends Builder<RegionModule> {
 
 		for(RegionParser parser : parsers) {
 			if(parser.getNames().contains(name)) {
-				regions.addAll(Lists.newArrayList(parser.parse(new ParsingContext(element).register(context.getMap()))));
+				try {
+					regions.addAll(Lists.newArrayList(parser.parse(new ParsingContext(element).register(context.getMap()))));
+				} catch(ModuleParsingException ex) {
+					Log.exception(ex);
+				}
 			}
 		}
 

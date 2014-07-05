@@ -1,14 +1,19 @@
 package in.parapengu.spork.module.modules.region.types;
 
+import com.google.common.collect.Lists;
+import in.parapengu.spork.exception.region.ModuleParsingException;
 import in.parapengu.spork.module.modules.region.RegionModule;
 import in.parapengu.spork.module.modules.region.builder.ParserInfo;
 import in.parapengu.spork.module.modules.region.builder.ParsingContext;
 import in.parapengu.spork.module.modules.region.builder.RegionParser;
+import in.parapengu.spork.util.ParsingUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @ParserInfo({"block", "point"})
 public class BlockRegion extends RegionModule {
@@ -25,7 +30,8 @@ public class BlockRegion extends RegionModule {
 	private Double zD;
 	private Integer zI;
 
-	public BlockRegion(String x, String y, String z) throws NumberFormatException {
+	public BlockRegion(String name, String x, String y, String z) throws NumberFormatException {
+		super(name);
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -89,12 +95,12 @@ public class BlockRegion extends RegionModule {
 		}
 	}
 
-	public BlockRegion(double x, double y, double z) {
-		this(x + "", y + "", z + "");
+	public BlockRegion(String name, double x, double y, double z) {
+		this(name, x + "", y + "", z + "");
 	}
 
-	public BlockRegion(int z, int y, int x) {
-		this(x + "", y + "", z + "");
+	public BlockRegion(String name, int z, int y, int x) {
+		this(name, x + "", y + "", z + "");
 	}
 
 	public String getStringX() {
@@ -145,8 +151,28 @@ public class BlockRegion extends RegionModule {
 		}
 
 		@Override
-		public List<BlockRegion> parse(ParsingContext context) {
-			return new ArrayList<>();
+		public List<BlockRegion> parse(ParsingContext context) throws ModuleParsingException {
+			String name = context.getElement().getAttributeValue("name");
+			Map<String, String> points = ParsingUtil.parse(context.getElement().getText());
+			if(points == null) {
+				String message;
+				if(context.getElement().getText() == null) {
+					message = "No points were specified in " + new XMLOutputter(Format.getPrettyFormat()).outputString(context.getElement());
+				} else {
+					message = "Invalid points specified in \"" + context.getElement().getText() + "\"";
+				}
+
+				throw new ModuleParsingException(BlockRegion.class, message);
+			}
+
+			BlockRegion region;
+			try {
+				region = new BlockRegion(name, points.get("x"), points.containsKey("y") ? points.get("y") : "oo", points.get("z"));
+			} catch(NumberFormatException ex) {
+				throw new ModuleParsingException(BlockRegion.class, ex);
+			}
+
+			return Lists.newArrayList(region);
 		}
 
 	}
