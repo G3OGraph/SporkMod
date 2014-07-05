@@ -14,6 +14,7 @@ import in.parapengu.spork.module.modules.region.types.CuboidRegion.CuboidParser;
 import in.parapengu.spork.module.modules.region.types.RectangleRegion.RectangleParser;
 import in.parapengu.spork.module.modules.region.types.CylinderRegion.CylinderParser;
 import in.parapengu.spork.module.modules.region.types.CircleRegion.CircleParser;
+import in.parapengu.spork.module.modules.region.types.SphereRegion.SphereParser;
 import in.parapengu.spork.util.Log;
 import org.jdom2.Element;
 
@@ -32,6 +33,7 @@ public class RegionBuilder extends Builder<RegionModule> {
 		parsers.add(new RectangleParser());
 		parsers.add(new CylinderParser());
 		parsers.add(new CircleParser());
+		parsers.add(new SphereParser());
 	}
 
 	public RegionBuilder() {
