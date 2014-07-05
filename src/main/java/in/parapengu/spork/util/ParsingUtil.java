@@ -28,6 +28,12 @@ public class ParsingUtil {
 			case "int":
 				result = (T) getInteger(string);
 				break;
+			case "Double":
+				result = (T) getDouble(string);
+				break;
+			case "double":
+				result = (T) getDouble(string);
+				break;
 		}
 
 		return result;
@@ -44,11 +50,13 @@ public class ParsingUtil {
 
 	public static Map<String, String> parse(String string, String... invalid) throws ModuleParsingException {
 		if(string == null) {
+			Log.debug("String is null");
 			return null;
 		}
 
 		String[] split = string.split(",");
 		if(split.length > 3 || split.length < 2) {
+			Log.debug("Invalid length");
 			return null;
 		}
 
@@ -119,6 +127,18 @@ public class ParsingUtil {
 
 		try {
 			return Integer.parseInt(string);
+		} catch(NumberFormatException ex) {
+			return null;
+		}
+	}
+
+	public static Double getDouble(String string) {
+		if(string == null) {
+			return null;
+		}
+
+		try {
+			return Double.parseDouble(string);
 		} catch(NumberFormatException ex) {
 			return null;
 		}

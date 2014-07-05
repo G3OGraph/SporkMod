@@ -136,6 +136,10 @@ public class BlockRegion extends RegionModule {
 		return zI;
 	}
 
+	public Location getLocation() {
+		return new Location(Bukkit.getWorlds().get(0), xD, yD, zD);
+	}
+
 	@Override
 	public boolean isInside(BlockRegion region) {
 		return region.getBlockX() == getBlockX() && region.getBlockY() == getBlockY() && region.getBlockZ() == getBlockZ();

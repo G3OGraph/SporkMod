@@ -26,6 +26,7 @@ public class MapLoadException extends Exception {
 	@Override
 	public void printStackTrace() {
 		if(exception != null) {
+			System.out.println(getMessage());
 			exception.printStackTrace();
 		} else {
 			super.printStackTrace();
