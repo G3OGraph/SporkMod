@@ -6,8 +6,6 @@ import in.parapengu.spork.exception.region.ModuleParsingException;
 import in.parapengu.spork.module.Module;
 import in.parapengu.spork.module.builder.Builder;
 import in.parapengu.spork.module.builder.BuilderContext;
-import in.parapengu.spork.module.modules.region.RegionModule;
-import in.parapengu.spork.module.modules.region.RegionParser;
 import in.parapengu.spork.util.Log;
 import org.jdom2.Element;
 
@@ -44,19 +42,23 @@ public class Parser<M extends Module, P extends ModuleParser> extends Builder<M>
 
 	public List<M> parse(Element element, BuilderContext context) {
 		String name = element.getName();
-		List<M> regions = new ArrayList<>();
+		List<M> modules = new ArrayList<>();
 
 		for(P parser : parsers) {
 			if(parser.getNames().contains(name)) {
 				try {
-					regions.addAll(Lists.newArrayList(parser.parse(new ParsingContext(element).register(context.getMap()))));
+					modules.addAll(Lists.newArrayList(add(parser, new ParsingContext(element).register(context.getMap()), modules)));
 				} catch(ModuleParsingException ex) {
 					Log.exception(ex);
 				}
 			}
 		}
 
-		return regions;
+		return modules;
+	}
+
+	public List<M> add(P parser, ParsingContext context, List<M> modules) throws ModuleParsingException {
+		return parser.parse(context);
 	}
 
 }

@@ -1,5 +1,7 @@
 package in.parapengu.spork;
 
+import in.parapengu.commons.utils.OtherUtil;
+import in.parapengu.commons.utils.countdown.Countdown;
 import in.parapengu.spork.exception.module.ModuleBuildException;
 import in.parapengu.spork.listeners.ConnectionListener;
 import in.parapengu.spork.map.MapFactory;
@@ -8,6 +10,8 @@ import in.parapengu.spork.module.ModuleRegistration;
 import in.parapengu.spork.module.modules.region.RegionModule;
 import in.parapengu.spork.module.modules.team.TeamModule;
 import in.parapengu.spork.util.Log;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -41,6 +45,22 @@ public class Spork extends JavaPlugin {
 
 		maps = new MapFactory();
 		maps.load(new File("maps"));
+
+		/*
+		new Countdown(this, ChatColor.AQUA + "Countdown ends in " + ChatColor.RED + "{TIMING}", 60 * 60 * 24 * 7 * 52) {
+
+			@Override
+			public boolean display() {
+				return true;
+			}
+
+			@Override
+			public void complete() {
+				Bukkit.broadcastMessage(ChatColor.AQUA + "Countdown has ended...");
+			}
+
+		}.start();
+		*/
 	}
 
 	@Override
