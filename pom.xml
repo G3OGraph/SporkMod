@@ -86,6 +86,11 @@
 			<artifactId>commons</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+		<dependency>
+			<groupId>me.confuser</groupId>
+			<artifactId>BarAPI</artifactId>
+			<version>3.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
