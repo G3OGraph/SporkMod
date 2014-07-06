@@ -12,6 +12,10 @@ import in.parapengu.spork.module.modules.region.types.CylinderRegion.CylinderPar
 import in.parapengu.spork.module.modules.region.types.CircleRegion.CircleParser;
 import in.parapengu.spork.module.modules.region.types.SphereRegion.SphereParser;
 import in.parapengu.spork.module.modules.region.types.ReferencedRegion.ReferencedParser;
+import in.parapengu.spork.module.modules.region.types.combinations.UnionRegion.UnionParser;
+import in.parapengu.spork.module.modules.region.types.combinations.NegativeRegion.NegativeParser;
+import in.parapengu.spork.module.modules.region.types.combinations.ComplementRegion.ComplementParser;
+import in.parapengu.spork.module.modules.region.types.combinations.IntersectRegion.IntersectParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +27,7 @@ public class RegionBuilder extends Parser<RegionModule, RegionParser> {
 
 	static {
 		parsers = new ArrayList<>();
+		// Standard Regions
 		parsers.add(new BlockParser());
 		parsers.add(new CuboidParser());
 		parsers.add(new RectangleParser());
@@ -30,6 +35,12 @@ public class RegionBuilder extends Parser<RegionModule, RegionParser> {
 		parsers.add(new CircleParser());
 		parsers.add(new SphereParser());
 		parsers.add(new ReferencedParser());
+
+		// Combination Regions
+		parsers.add(new UnionParser());
+		parsers.add(new NegativeParser());
+		parsers.add(new ComplementParser());
+		parsers.add(new IntersectParser());
 	}
 
 	public RegionBuilder() {
