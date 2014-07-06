@@ -47,7 +47,7 @@ public class Parser<M extends Module, P extends ModuleParser> extends Builder<M>
 		for(P parser : parsers) {
 			if(parser.getNames().contains(name)) {
 				try {
-					modules.addAll(Lists.newArrayList(add(parser, new ParsingContext(element).register(context.getMap()), modules)));
+					modules.addAll(Lists.newArrayList(add(parser, new ParsingContext(element).addMap(context.getMap()), modules)));
 				} catch(ModuleParsingException ex) {
 					Log.exception(ex);
 				}

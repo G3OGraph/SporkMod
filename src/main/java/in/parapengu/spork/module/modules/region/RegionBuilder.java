@@ -49,7 +49,7 @@ public class RegionBuilder extends Parser<RegionModule, RegionParser> {
 
 	@Override
 	public List<RegionModule> add(RegionParser parser, ParsingContext context, List<RegionModule> modules) throws ModuleParsingException {
-		context.register(modules);
+		context.addRegions(modules);
 		return super.add(parser, context, modules);
 	}
 

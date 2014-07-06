@@ -3,12 +3,16 @@ package in.parapengu.spork;
 import in.parapengu.commons.utils.OtherUtil;
 import in.parapengu.commons.utils.countdown.Countdown;
 import in.parapengu.spork.exception.module.ModuleBuildException;
+import in.parapengu.spork.listeners.BlockListener;
 import in.parapengu.spork.listeners.ConnectionListener;
 import in.parapengu.spork.map.MapFactory;
 import in.parapengu.spork.module.ModuleFactory;
 import in.parapengu.spork.module.ModuleRegistration;
+import in.parapengu.spork.module.modules.filter.FilterModule;
 import in.parapengu.spork.module.modules.region.RegionModule;
 import in.parapengu.spork.module.modules.team.TeamModule;
+import in.parapengu.spork.rotation.Rotation;
+import in.parapengu.spork.rotation.RotationSlot;
 import in.parapengu.spork.util.Log;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -19,6 +23,7 @@ import java.io.File;
 public class Spork extends JavaPlugin {
 
 	private static Spork instance;
+	private static Rotation rotation;
 
 	private ModuleFactory factory;
 	private MapFactory maps;
@@ -34,6 +39,7 @@ public class Spork extends JavaPlugin {
 		ModuleRegistration registration = new ModuleRegistration();
 		registration.register(TeamModule.class);
 		registration.register(RegionModule.class);
+		registration.register(FilterModule.class);
 
 		try {
 			factory = new ModuleFactory(registration);
@@ -42,6 +48,7 @@ public class Spork extends JavaPlugin {
 		}
 
 		getServer().getPluginManager().registerEvents(new ConnectionListener(), this);
+		getServer().getPluginManager().registerEvents(new BlockListener(), this);
 
 		maps = new MapFactory();
 		maps.load(new File("maps"));
@@ -70,6 +77,31 @@ public class Spork extends JavaPlugin {
 
 	public static Spork get() {
 		return instance;
+	}
+
+	public static Rotation getRotation() {
+		return rotation;
+	}
+
+	public static RotationSlot getSlot() {
+		return rotation.getSlots().get(rotation.getIndex());
+	}
+
+	public static RotationSlot getNext() {
+		if(!hasNext()) {
+			return null;
+		}
+
+		return rotation.getSlots().get(rotation.getIndex() + 1);
+	}
+
+	public static boolean hasNext() {
+		try {
+			rotation.getSlots().get(rotation.getIndex() + 1);
+			return true;
+		} catch(IndexOutOfBoundsException ex) {
+			return false;
+		}
 	}
 
 	public static ModuleFactory getFactory() {

@@ -100,6 +100,10 @@ public class BlockRegion extends RegionModule {
 		this(name, x + "", y + "", z + "");
 	}
 
+	public BlockRegion(String name, Location location) {
+		this(name, location.getX(), location.getY(), location.getZ());
+	}
+
 	public String getStringX() {
 		return x;
 	}
