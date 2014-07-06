@@ -1,8 +1,8 @@
 package in.parapengu.spork;
 
-import in.parapengu.commons.utils.OtherUtil;
-import in.parapengu.commons.utils.countdown.Countdown;
+import in.parapengu.spork.exception.map.MapLoadException;
 import in.parapengu.spork.exception.module.ModuleBuildException;
+import in.parapengu.spork.exception.rotation.RotationLoadException;
 import in.parapengu.spork.listeners.BlockListener;
 import in.parapengu.spork.listeners.ConnectionListener;
 import in.parapengu.spork.map.MapFactory;
@@ -14,6 +14,7 @@ import in.parapengu.spork.module.modules.team.TeamModule;
 import in.parapengu.spork.rotation.Rotation;
 import in.parapengu.spork.rotation.RotationSlot;
 import in.parapengu.spork.util.Log;
+import in.parapengu.spork.util.countdown.BarCountdown;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -53,12 +54,29 @@ public class Spork extends JavaPlugin {
 		maps = new MapFactory();
 		maps.load(new File("maps"));
 
-		/*
-		new Countdown(this, ChatColor.AQUA + "Countdown ends in " + ChatColor.RED + "{TIMING}", 60 * 60 * 24 * 7 * 52) {
+		try {
+			rotation = Rotation.parse(new File("rotation.txt"));
+		} catch(RotationLoadException ex) {
+			Log.exception(ex);
+			Log.info("Failed to load Rotation! Disabling plugin...");
+			setEnabled(false);
+			return;
+		}
+
+		try {
+			getSlot().load(rotation.getIndex() + 1);
+		} catch(MapLoadException ex) {
+			Log.exception(ex);
+			Log.info("Failed to load " + getSlot().getLoader().getName() + "! Disabling plugin...");
+			setEnabled(false);
+			return;
+		}
+
+		new BarCountdown(this, ChatColor.AQUA + "Countdown ends in " + ChatColor.RED + "{TIMING}", 60 * 60 * 24) {
 
 			@Override
 			public boolean display() {
-				return true;
+				return getRemainingTime() % 10 == 0;
 			}
 
 			@Override
@@ -67,7 +85,6 @@ public class Spork extends JavaPlugin {
 			}
 
 		}.start();
-		*/
 	}
 
 	@Override

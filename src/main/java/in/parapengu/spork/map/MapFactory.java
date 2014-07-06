@@ -117,4 +117,44 @@ public class MapFactory {
 		return null;
 	}
 
+	public MapLoader getMap(String search) {
+		for(MapLoader loader : loaders) {
+			if(loader.getName().equalsIgnoreCase(search)) {
+				return loader;
+			}
+		}
+
+		for(MapLoader loader : loaders) {
+			if(loader.getFolder().getName().equalsIgnoreCase(search)) {
+				return loader;
+			}
+		}
+
+		for(MapLoader loader : loaders) {
+			if(loader.getName().toLowerCase().startsWith(search.toLowerCase())) {
+				return loader;
+			}
+		}
+
+		for(MapLoader loader : loaders) {
+			if(loader.getFolder().getName().toLowerCase().startsWith(search.toLowerCase())) {
+				return loader;
+			}
+		}
+
+		for(MapLoader loader : loaders) {
+			if(loader.getName().toLowerCase().contains(search.toLowerCase())) {
+				return loader;
+			}
+		}
+
+		for(MapLoader loader : loaders) {
+			if(loader.getFolder().getName().toLowerCase().contains(search.toLowerCase())) {
+				return loader;
+			}
+		}
+
+		return null;
+	}
+
 }

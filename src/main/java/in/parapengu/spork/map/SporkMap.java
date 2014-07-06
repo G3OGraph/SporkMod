@@ -116,6 +116,10 @@ public class SporkMap {
 				throw new MapLoadException(this, "Required file '" + file + "' does not exist");
 			}
 
+			if(!src.exists()) {
+				continue;
+			}
+
 			try {
 				FileUtil.copy(src, dest);
 			} catch(IOException ex) {
