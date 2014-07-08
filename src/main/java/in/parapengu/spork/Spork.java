@@ -64,49 +64,13 @@ public class Spork extends JavaPlugin {
         }
 
 		try {
-			rotation = Rotation.parse(new File(getConfig().getString("rotation.file")));
-		} catch(NullPointerException npe) {
-            Log.info("Failed to load Rotation File! Generating rotation.txt...");
-            Writer writer = null;
-
-            getConfig().set("rotation.file", "rotation.txt");
-            saveConfig();
-
-            try {
-                writer = new BufferedWriter(new OutputStreamWriter(
-                        new FileOutputStream("rotation.txt"), "utf-8"));
-                //write the list of maps here
-                writer.write("0\n");
-                writer.write("Race for Victory 2");
-            } catch (IOException ioe) {
-                Log.info("rotation.txt could not be generated!");
-            } finally {
-                try {
-                    writer.close();
-                } catch (Exception exc) {
-                    Log.exception(exc);
-                    Log.info("Writer couldn't close!");
-                } finally {
-                    Log.info("rotation.txt was generated!");
-                }
-            }
-
-            try {
-                rotation = Rotation.parse(new File(getConfig().getString("rotation.file")));
-            } catch(RotationLoadException e) {
-                Log.exception(e);
-                Log.info("Rotation File could not be loaded!");
-            }
-
-        } catch(RotationLoadException ex) {
-
-            Log.exception(ex);
-            Log.info("Failed to load Rotation File!");
-
-            setEnabled(false);
-            return;
-        }
-
+			rotation = load();
+		} catch(RotationLoadException ex) {
+			Log.exception(ex);
+			Log.info("Failed to load Rotation! Disabling plugin...");
+			setEnabled(false);
+			return;
+		}
 
 		try {
 			getSlot().load(rotation.getIndex() + 1);
@@ -137,8 +101,37 @@ public class Spork extends JavaPlugin {
 		instance = null;
 	}
 
+	public Rotation load() throws RotationLoadException {
+		if(!config.getRotation().exists()) {
+			Log.info("No Rotation existed - attempting to create a new one");
+			try {
+				TextFile file = new TextFile(config.getRotation());
+				file.line("0");
+				for(MapLoader loader : maps.getLoaders()) {
+					file.line(loader.getName());
+				}
+
+				file.save();
+			} catch(IOException io) {
+				Log.exception(io);
+				throw new RotationLoadException(config.getRotation(), "Could not load Rotation because when creating a new Rotation an exception was thrown");
+			}
+		}
+
+		return Rotation.parse(config.getRotation());
+	}
+
+	@Override
+	public SporkConfig getConfig() {
+		return config;
+	}
+
 	public static Spork get() {
 		return instance;
+	}
+
+	public static SporkConfig getSporkConfig() {
+		return config;
 	}
 
 	public static Rotation getRotation() {
