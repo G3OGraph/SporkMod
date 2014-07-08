@@ -1,11 +1,13 @@
 package in.parapengu.spork;
 
+import in.parapengu.commons.utils.file.TextFile;
 import in.parapengu.spork.exception.map.MapLoadException;
 import in.parapengu.spork.exception.module.ModuleBuildException;
 import in.parapengu.spork.exception.rotation.RotationLoadException;
 import in.parapengu.spork.listeners.BlockListener;
 import in.parapengu.spork.listeners.ConnectionListener;
 import in.parapengu.spork.map.MapFactory;
+import in.parapengu.spork.map.MapLoader;
 import in.parapengu.spork.module.ModuleFactory;
 import in.parapengu.spork.module.ModuleRegistration;
 import in.parapengu.spork.module.modules.filter.FilterModule;
@@ -14,17 +16,19 @@ import in.parapengu.spork.module.modules.team.TeamModule;
 import in.parapengu.spork.rotation.Rotation;
 import in.parapengu.spork.rotation.RotationSlot;
 import in.parapengu.spork.util.Log;
+import in.parapengu.spork.util.SporkConfig;
 import in.parapengu.spork.util.countdown.BarCountdown;
-import net.minecraft.util.org.apache.commons.lang3.ObjectUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 
 public class Spork extends JavaPlugin {
 
 	private static Spork instance;
+	private static SporkConfig config;
 	private static Rotation rotation;
 
 	private ModuleFactory factory;
@@ -38,6 +42,7 @@ public class Spork extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		config = new SporkConfig();
 		ModuleRegistration registration = new ModuleRegistration();
 		registration.register(TeamModule.class);
 		registration.register(RegionModule.class);
@@ -53,15 +58,7 @@ public class Spork extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new BlockListener(), this);
 
 		maps = new MapFactory();
-
-        try {
-            maps.load(new File(getConfig().getString("repository.path")));
-        } catch(NullPointerException npe) {
-            getConfig().set("repository.path", "maps");
-            saveConfig();
-            Log.info("Default map repository path has been set to '/maps'");
-            maps.load(new File(getConfig().getString("repository.path")));
-        }
+		maps.load(config.getRepository());
 
 		try {
 			rotation = load();
