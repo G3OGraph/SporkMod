@@ -119,7 +119,7 @@ public class SporkMap {
 		for(String string : copy) {
 			String[] split = string.split(" ");
 			String file = split[0];
-			boolean required = split[0].equalsIgnoreCase("true");
+			boolean required = split[1].equalsIgnoreCase("true");
 
 			File src = new File(folder, file);
 			File dest = new File(destination, file);
