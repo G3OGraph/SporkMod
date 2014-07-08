@@ -56,8 +56,18 @@ public class TeamModule extends Module {
 		return teams;
 	}
 
-	public boolean join(PlayerData player) {
+	public void setTeams(List<Team> teams) {
+		this.teams = teams;
+	}
+
+	public boolean join(JoinContext context) {
+		PlayerData player = context.getPlayer();
 		player.setTeam(this);
+
+		for(Team team : teams) {
+			team.addPlayer(player.getPlayer());
+		}
+
 		return true;
 	}
 

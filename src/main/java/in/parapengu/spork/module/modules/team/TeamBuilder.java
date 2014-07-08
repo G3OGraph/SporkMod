@@ -36,23 +36,23 @@ public class TeamBuilder extends Builder<TeamModule> {
 			throw new ModuleLoadException(module, "No teams were available");
 		}
 
-		for(Element team : teams) {
-			String name = team.getText();
-			ChatColor color = ParsingUtil.parse(ChatColor.class, team.getAttributeValue("color"));
-			ChatColor overhead = ParsingUtil.parse(ChatColor.class, team.getAttributeValue("overhead-color"));
-			Integer max = ParsingUtil.parse(Integer.class, team.getAttributeValue("max"));
-			Integer overfill = ParsingUtil.parse(Integer.class, team.getAttributeValue("max-overfill"));
+		for(Element child : teams) {
+			String name = child.getText();
+			ChatColor color = ParsingUtil.parse(ChatColor.class, child.getAttributeValue("color"));
+			ChatColor overhead = ParsingUtil.parse(ChatColor.class, child.getAttributeValue("overhead-color"));
+			Integer max = ParsingUtil.parse(Integer.class, child.getAttributeValue("max"));
+			Integer overfill = ParsingUtil.parse(Integer.class, child.getAttributeValue("max-overfill"));
 
 			if(name == null) {
-				throw new ModuleLoadException(module, new XMLOutputter(Format.getPrettyFormat()).outputString(team) + " did not contain a name");
+				throw new ModuleLoadException(module, new XMLOutputter(Format.getPrettyFormat()).outputString(child) + " did not contain a name");
 			}
 
 			if(color == null) {
-				throw new ModuleLoadException(module, new XMLOutputter(Format.getPrettyFormat()).outputString(team) + " (" + name + ") did not contain a suitable color");
+				throw new ModuleLoadException(module, new XMLOutputter(Format.getPrettyFormat()).outputString(child) + " (" + name + ") did not contain a suitable color");
 			}
 
 			if(max == null) {
-				throw new ModuleLoadException(module, new XMLOutputter(Format.getPrettyFormat()).outputString(team) + " (" + name + ") did not contain a suitable amount of max players");
+				throw new ModuleLoadException(module, new XMLOutputter(Format.getPrettyFormat()).outputString(child) + " (" + name + ") did not contain a suitable amount of max players");
 			}
 
 			if(overhead == null) {
@@ -63,7 +63,9 @@ public class TeamBuilder extends Builder<TeamModule> {
 				overfill = (int) Math.ceil((((double) max) / 4) * 5);
 			}
 
-			list.add(new TeamModule(name, color, overhead, max, overfill, false));
+			TeamModule team = new TeamModule(name, color, overhead, max, overfill, false);
+			team.setTeams(context.getMap().getBoard().getTeams(team));
+			list.add(team);
 		}
 
 		list.add(new TeamModule("Observers", ChatColor.AQUA, ChatColor.AQUA, -1, -1, true));

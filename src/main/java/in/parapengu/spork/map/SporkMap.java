@@ -1,11 +1,17 @@
 package in.parapengu.spork.map;
 
 import com.google.common.collect.Lists;
+import in.parapengu.spork.Spork;
 import in.parapengu.spork.exception.map.MapLoadException;
 import in.parapengu.spork.map.features.Contributor;
 import in.parapengu.spork.match.Match;
 import in.parapengu.spork.module.ModuleCollection;
+import in.parapengu.spork.module.builder.BuildPhase;
+import in.parapengu.spork.module.builder.BuilderContext;
 import in.parapengu.spork.module.modules.team.TeamModule;
+import in.parapengu.spork.scoreboard.BoardManager;
+import in.parapengu.spork.scoreboard.BoardType;
+import in.parapengu.spork.scoreboard.entry.BoardEntry;
 import in.parapengu.spork.util.FileUtil;
 import in.parapengu.spork.util.Log;
 import org.bukkit.Bukkit;
@@ -34,6 +40,7 @@ public class SporkMap {
 	private List<Contributor> contributors;
 	private ModuleCollection modules;
 
+	private BoardManager board;
 	private World world;
 
 	public SporkMap(MapLoader loader) {
@@ -88,6 +95,10 @@ public class SporkMap {
 		return modules.getModules(TeamModule.class);
 	}
 
+	public BoardManager getBoard() {
+		return board;
+	}
+
 	public boolean load(Match match) throws MapLoadException {
 		String name = MATCH_STYLE.replace("{id}", match.getId() + "");
 		if(Bukkit.getWorld(name) != null) {
@@ -136,6 +147,10 @@ public class SporkMap {
 			}
 		});
 		world = creator.createWorld();
+		board = new BoardManager(this);
+		board.create(BoardType.SIDEBAR);
+		board.create("silent");
+		modules.addAll(Spork.getFactory().build(new BuilderContext(BuildPhase.LOAD).register(document).register(modules)));
 		return true;
 	}
 

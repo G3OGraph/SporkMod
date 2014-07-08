@@ -29,7 +29,7 @@ public class ModuleFactory {
 		List<Module> modules = new ArrayList<>();
 		for(Builder builder : builders) {
 			try {
-				modules.addAll(builder.build(context));
+				modules.addAll(builder.build(context.register(modules)));
 			} catch(ModuleLoadException ex) {
 				Log.exception(ex);
 				if(builder.getClass().getAnnotation(BuilderInfo.class).required()) {

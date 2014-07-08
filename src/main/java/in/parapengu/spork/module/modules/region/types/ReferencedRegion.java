@@ -7,6 +7,7 @@ import in.parapengu.spork.module.builder.parsers.ParserInfo;
 import in.parapengu.spork.module.builder.parsers.ParsingContext;
 import in.parapengu.spork.module.modules.region.RegionParser;
 import in.parapengu.spork.util.ParsingUtil;
+import org.jdom2.Element;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
@@ -40,15 +41,24 @@ public class ReferencedRegion extends RegionModule {
 
 		@Override
 		public List<ReferencedRegion> parse(ParsingContext context) throws ModuleParsingException {
-			String name = context.getElement().getAttributeValue("name");
-			List<RegionModule> regions = context.getRegions();
+			return parse(context.getElement().getAttributeValue("name"), context.getRegions(), context.getElement());
+		}
+
+		public List<ReferencedRegion> parse(String name, List<RegionModule> regions, Element element) throws ModuleParsingException {
 			for(RegionModule region : regions) {
 				if(region.getName() != null && region.getName().equals(name)) {
 					return Lists.newArrayList(new ReferencedRegion(region));
 				}
 			}
 
-			throw new ModuleParsingException(ReferencedRegion.class, "Could not find Region for " + new XMLOutputter(Format.getPrettyFormat()).outputString(context.getElement()));
+			String output;
+			if(element == null) {
+				output = "<region name=\"" + name + "\"/>";
+			} else {
+				output = new XMLOutputter(Format.getPrettyFormat()).outputString(element);
+			}
+
+			throw new ModuleParsingException(ReferencedRegion.class, "Could not find Region for " + output);
 		}
 
 		public String compile(String value, boolean min) throws ModuleParsingException {

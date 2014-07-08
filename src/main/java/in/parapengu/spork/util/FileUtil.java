@@ -15,20 +15,14 @@ import java.util.List;
 
 public class FileUtil {
 
-	private static boolean deleteDirectory(File directory) {
-		if(directory.exists()) {
-			File[] files = directory.listFiles();
-			if(null != files) {
-				for(File file : files) {
-					if(file.isDirectory()) {
-						deleteDirectory(file);
-					} else {
-						file.delete();
-					}
-				}
+	public static void delete(File dir) {
+		if(dir.isDirectory()) {
+			String[] children = dir.list();
+			for(String child : children) {
+				delete(new File(dir, child));
 			}
 		}
-		return directory.delete();
+		dir.delete();
 	}
 
 	public static void clean() {
@@ -47,7 +41,7 @@ public class FileUtil {
 				}
 				Bukkit.getServer().unloadWorld(folder, true);
 				File folderfile = new File(folder);
-				deleteDirectory(folderfile);
+				delete(folderfile);
 			}
 		}
 	}
@@ -64,16 +58,6 @@ public class FileUtil {
 			}
 		}
 		return list;
-	}
-
-	public static void delete(File dir) {
-		if(dir.isDirectory()) {
-			String[] children = dir.list();
-			for(String child : children) {
-				delete(new File(dir, child));
-			}
-		}
-		dir.delete();
 	}
 
 	public static void move(File from, File to) throws IOException {
