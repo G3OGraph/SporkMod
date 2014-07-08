@@ -37,12 +37,12 @@ public class Spork extends JavaPlugin {
 	@Override
 	public void onLoad() {
 		instance = this;
-		Log.setDebug(true);
 	}
 
 	@Override
 	public void onEnable() {
 		config = new SporkConfig();
+		Log.setDebug(config.isDebug());
 		ModuleRegistration registration = new ModuleRegistration();
 		registration.register(TeamModule.class);
 		registration.register(RegionModule.class);
