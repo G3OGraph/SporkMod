@@ -23,14 +23,10 @@ public class ParsingUtil {
 				result = (T) getChatColor(string);
 				break;
 			case "Integer":
-				result = (T) getInteger(string);
-				break;
 			case "int":
 				result = (T) getInteger(string);
 				break;
 			case "Double":
-				result = (T) getDouble(string);
-				break;
 			case "double":
 				result = (T) getDouble(string);
 				break;
