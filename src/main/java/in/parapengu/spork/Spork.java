@@ -15,11 +15,12 @@ import in.parapengu.spork.rotation.Rotation;
 import in.parapengu.spork.rotation.RotationSlot;
 import in.parapengu.spork.util.Log;
 import in.parapengu.spork.util.countdown.BarCountdown;
+import net.minecraft.util.org.apache.commons.lang3.ObjectUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
+import java.io.*;
 
 public class Spork extends JavaPlugin {
 
@@ -52,16 +53,60 @@ public class Spork extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new BlockListener(), this);
 
 		maps = new MapFactory();
-		maps.load(new File("maps"));
+
+        try {
+            maps.load(new File(getConfig().getString("repository.path")));
+        } catch(NullPointerException npe) {
+            getConfig().set("repository.path", "maps");
+            saveConfig();
+            Log.info("Default map repository path has been set to '/maps'");
+            maps.load(new File(getConfig().getString("repository.path")));
+        }
 
 		try {
-			rotation = Rotation.parse(new File("rotation.txt"));
-		} catch(RotationLoadException ex) {
-			Log.exception(ex);
-			Log.info("Failed to load Rotation! Disabling plugin...");
-			setEnabled(false);
-			return;
-		}
+			rotation = Rotation.parse(new File(getConfig().getString("rotation.file")));
+		} catch(NullPointerException npe) {
+            Log.info("Failed to load Rotation File! Generating rotation.txt...");
+            Writer writer = null;
+
+            getConfig().set("rotation.file", "rotation.txt");
+            saveConfig();
+
+            try {
+                writer = new BufferedWriter(new OutputStreamWriter(
+                        new FileOutputStream("rotation.txt"), "utf-8"));
+                //write the list of maps here
+                writer.write("0\n");
+                writer.write("Race for Victory 2");
+            } catch (IOException ioe) {
+                Log.info("rotation.txt could not be generated!");
+            } finally {
+                try {
+                    writer.close();
+                } catch (Exception exc) {
+                    Log.exception(exc);
+                    Log.info("Writer couldn't close!");
+                } finally {
+                    Log.info("rotation.txt was generated!");
+                }
+            }
+
+            try {
+                rotation = Rotation.parse(new File(getConfig().getString("rotation.file")));
+            } catch(RotationLoadException e) {
+                Log.exception(e);
+                Log.info("Rotation File could not be loaded!");
+            }
+
+        } catch(RotationLoadException ex) {
+
+            Log.exception(ex);
+            Log.info("Failed to load Rotation File!");
+
+            setEnabled(false);
+            return;
+        }
+
 
 		try {
 			getSlot().load(rotation.getIndex() + 1);
