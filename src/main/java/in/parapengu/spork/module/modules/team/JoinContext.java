@@ -40,4 +40,5 @@ public class JoinContext {
 	public void setInventory(boolean inventory) {
 		this.inventory = inventory;
 	}
+
 }
