@@ -1,6 +1,7 @@
 package in.parapengu.spork.module.modules.region.types;
 
 import com.google.common.collect.Lists;
+import in.parapengu.commons.utils.OtherUtil;
 import in.parapengu.spork.exception.region.ModuleParsingException;
 import in.parapengu.spork.module.modules.region.RegionModule;
 import in.parapengu.spork.module.builder.parsers.ParserInfo;
@@ -13,6 +14,7 @@ import org.jdom2.output.XMLOutputter;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 @ParserInfo({"cylinder"})
 public class CylinderRegion extends RegionModule {
@@ -40,6 +42,24 @@ public class CylinderRegion extends RegionModule {
 
 		double distance = location.distance(base.getLocation());
 		return distance <= radius;
+	}
+
+	@Override
+	public BlockRegion getRandom() {
+		Random rndGen = new Random();
+		int r = rndGen.nextInt((int) Math.floor(radius));
+		int x = rndGen.nextInt(r);
+		int z = (int) Math.sqrt(Math.pow(r,2) - Math.pow(x,2));
+		if(rndGen.nextBoolean()) x *= -1;
+		if(rndGen.nextBoolean()) z *= -1;
+
+		int y = (int) OtherUtil.getRandom(base.getY(), base.getY() + height);
+
+		x += base.getBlockX();
+		y += base.getBlockY();
+		z += base.getBlockZ();
+
+		return new BlockRegion(null, x, y, z);
 	}
 
 	public static class CylinderParser extends RegionParser<CylinderRegion> {

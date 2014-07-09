@@ -33,6 +33,11 @@ public class ReferencedRegion extends RegionModule {
 		return referenced.isInside(region);
 	}
 
+	@Override
+	public BlockRegion getRandom() {
+		return referenced.getRandom();
+	}
+
 	public static class ReferencedParser extends RegionParser<ReferencedRegion> {
 
 		public ReferencedParser() {

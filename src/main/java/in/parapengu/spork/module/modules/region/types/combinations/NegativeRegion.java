@@ -1,6 +1,7 @@
 package in.parapengu.spork.module.modules.region.types.combinations;
 
 import com.google.common.collect.Lists;
+import in.parapengu.commons.utils.OtherUtil;
 import in.parapengu.spork.exception.region.ModuleParsingException;
 import in.parapengu.spork.module.builder.BuildPhase;
 import in.parapengu.spork.module.builder.BuilderContext;
@@ -25,6 +26,11 @@ public class NegativeRegion extends UnionRegion {
 	@Override
 	public boolean isInside(BlockRegion region) {
 		return !super.isInside(region);
+	}
+
+	@Override
+	public BlockRegion getRandom() {
+		return null;
 	}
 
 	public static class NegativeParser extends RegionParser<NegativeRegion> {

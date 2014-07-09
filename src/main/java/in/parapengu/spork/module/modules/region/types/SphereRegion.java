@@ -1,6 +1,7 @@
 package in.parapengu.spork.module.modules.region.types;
 
 import com.google.common.collect.Lists;
+import in.parapengu.commons.utils.OtherUtil;
 import in.parapengu.spork.exception.region.ModuleParsingException;
 import in.parapengu.spork.module.modules.region.RegionModule;
 import in.parapengu.spork.module.builder.parsers.ParserInfo;
@@ -29,6 +30,20 @@ public class SphereRegion extends RegionModule {
 	public boolean isInside(BlockRegion region) {
 		double distance = region.getLocation().distance(base.getLocation());
 		return distance <= radius;
+	}
+
+	@Override
+	public BlockRegion getRandom() {
+		// TODO: Optimise this code
+
+		BlockRegion region;
+		do {
+			int x = (int) (base.getBlockX() + Math.floor(OtherUtil.getRandom(0, radius)));
+			int y = (int) (base.getBlockY() + Math.floor(OtherUtil.getRandom(0, radius)));
+			int z = (int) (base.getBlockZ() + Math.floor(OtherUtil.getRandom(0, radius)));
+			region = new BlockRegion(null, x, y, z);
+		} while(!isInside(region));
+		return region;
 	}
 
 	public static class SphereParser extends RegionParser<SphereRegion> {

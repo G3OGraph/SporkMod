@@ -1,6 +1,7 @@
 package in.parapengu.spork.module.modules.region.types;
 
 import com.google.common.collect.Lists;
+import in.parapengu.commons.utils.OtherUtil;
 import in.parapengu.spork.exception.region.ModuleParsingException;
 import in.parapengu.spork.module.modules.region.RegionModule;
 import in.parapengu.spork.module.builder.parsers.ParserInfo;
@@ -70,6 +71,18 @@ public class CuboidRegion extends RegionModule {
 		boolean y = minY <= region.getBlockY() && region.getBlockY() <= maxY;
 		boolean z = minZ <= region.getBlockZ() && region.getBlockZ() <= maxZ;
 		return x && y && z;
+	}
+
+	@Override
+	public BlockRegion getRandom() {
+		int minX = min.getBlockX(), maxX = max.getBlockX();
+		int minY = min.getBlockY(), maxY = max.getBlockY();
+		int minZ = min.getBlockZ(), maxZ = max.getBlockZ();
+
+		int x = OtherUtil.getRandom(minX, maxX);
+		int y = OtherUtil.getRandom(minY, maxY);
+		int z = OtherUtil.getRandom(minZ, maxZ);
+		return new BlockRegion(null, x, y, z);
 	}
 
 	public static class CuboidParser extends RegionParser<CuboidRegion> {

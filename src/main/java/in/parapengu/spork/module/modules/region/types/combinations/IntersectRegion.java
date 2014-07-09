@@ -1,6 +1,7 @@
 package in.parapengu.spork.module.modules.region.types.combinations;
 
 import com.google.common.collect.Lists;
+import in.parapengu.commons.utils.OtherUtil;
 import in.parapengu.spork.exception.region.ModuleParsingException;
 import in.parapengu.spork.module.builder.BuildPhase;
 import in.parapengu.spork.module.builder.BuilderContext;
@@ -44,6 +45,17 @@ public class IntersectRegion extends RegionModule {
 		}
 
 		return false;
+	}
+
+	@Override
+	public BlockRegion getRandom() {
+		// TODO: Optimise this code
+
+		BlockRegion result;
+		do {
+			result = OtherUtil.getRandom(regions).getRandom();
+		} while(!isInside(result));
+		return result;
 	}
 
 	public static class IntersectParser extends RegionParser<IntersectRegion> {

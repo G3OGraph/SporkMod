@@ -1,6 +1,7 @@
 package in.parapengu.spork.module.modules.region.types.combinations;
 
 import com.google.common.collect.Lists;
+import in.parapengu.commons.utils.OtherUtil;
 import in.parapengu.spork.exception.region.ModuleParsingException;
 import in.parapengu.spork.module.builder.BuildPhase;
 import in.parapengu.spork.module.builder.BuilderContext;
@@ -33,13 +34,30 @@ public class ComplementRegion extends RegionModule {
 
 	@Override
 	public boolean isInside(BlockRegion region) {
+		List<RegionModule> multiple = new ArrayList<>();
+
 		for(RegionModule module : regions) {
 			if(module.isInside(region)) {
-				return true;
+				multiple.add(module);
+			}
+
+			if(multiple.size() > 1) {
+				return false;
 			}
 		}
 
-		return false;
+		return multiple.size() == 1;
+	}
+
+	@Override
+	public BlockRegion getRandom() {
+		// TODO: Optimise this code
+
+		BlockRegion result;
+		do {
+			result = OtherUtil.getRandom(regions).getRandom();
+		} while(!isInside(result));
+		return result;
 	}
 
 	public static class ComplementParser extends RegionParser<ComplementRegion> {

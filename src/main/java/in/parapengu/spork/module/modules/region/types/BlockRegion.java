@@ -149,6 +149,11 @@ public class BlockRegion extends RegionModule {
 		return region.getBlockX() == getBlockX() && region.getBlockY() == getBlockY() && region.getBlockZ() == getBlockZ();
 	}
 
+	@Override
+	public BlockRegion getRandom() {
+		return this;
+	}
+
 	public static class BlockParser extends RegionParser<BlockRegion> {
 
 		public BlockParser() {

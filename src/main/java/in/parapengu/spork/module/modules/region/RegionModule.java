@@ -24,4 +24,6 @@ public abstract class RegionModule extends Module {
 
 	public abstract boolean isInside(BlockRegion region);
 
+	public abstract BlockRegion getRandom();
+
 }
