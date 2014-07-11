@@ -34,7 +34,7 @@ public abstract class BarCountdown extends Countdown {
 		}
 
 		try {
-			BarAPI.getPlugin(BarAPI.class);
+			Class.forName("me.confuser.barapi.BarAPI");
 		} catch(Exception ex) {
 			Log.exception(ex);
 			bar = false;
