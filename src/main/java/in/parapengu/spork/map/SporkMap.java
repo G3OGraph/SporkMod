@@ -150,7 +150,7 @@ public class SporkMap {
 		board = new BoardManager(this);
 		board.create(BoardType.SIDEBAR);
 		board.create("silent");
-		modules.addAll(Spork.getFactory().build(new BuilderContext(BuildPhase.LOAD).register(document).register(modules)));
+		modules.addAll(Spork.getFactory().build(new BuilderContext(BuildPhase.LOAD).register(document).register(this).register(modules)));
 		return true;
 	}
 
