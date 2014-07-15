@@ -16,13 +16,15 @@ import in.parapengu.spork.module.modules.team.TeamModule;
 import in.parapengu.spork.rotation.Rotation;
 import in.parapengu.spork.rotation.RotationSlot;
 import in.parapengu.spork.util.Log;
-import in.parapengu.spork.util.SporkConfig;
+import in.parapengu.spork.util.config.SporkConfig;
+import in.parapengu.spork.util.config.groups.GitHubConfig;
 import in.parapengu.spork.util.countdown.BarCountdown;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GitHub;
 
-import java.io.File;
 import java.io.IOException;
 
 public class Spork extends JavaPlugin {
@@ -57,14 +59,30 @@ public class Spork extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new ConnectionListener(), this);
 		getServer().getPluginManager().registerEvents(new BlockListener(), this);
 
+		if(config.hasGithub()) {
+			GitHubConfig git = config.getGitHub();
+			try {
+				GitHub github = GitHub.connectUsingPassword(git.getUser(), git.getPassword());
+
+			} catch(IOException ex) {
+				Log.info("Could not use GitHub connector due to an IOException");
+				Log.exception(ex);
+			}
+		}
+
 		maps = new MapFactory();
 		maps.load(config.getRepository());
+		if(maps.getLoaders().size() <= 0) {
+			Log.severe("No maps were found in the maps repository! Disabling plugin...");
+			setEnabled(false);
+			return;
+		}
 
 		try {
 			rotation = load();
 		} catch(RotationLoadException ex) {
 			Log.exception(ex);
-			Log.info("Failed to load Rotation! Disabling plugin...");
+			Log.severe("Failed to load Rotation! Disabling plugin...");
 			setEnabled(false);
 			return;
 		}
@@ -73,7 +91,7 @@ public class Spork extends JavaPlugin {
 			getSlot().load(rotation.getIndex() + 1);
 		} catch(MapLoadException ex) {
 			Log.exception(ex);
-			Log.info("Failed to load " + getSlot().getLoader().getName() + "! Disabling plugin...");
+			Log.severe("Failed to load " + getSlot().getLoader().getName() + "! Disabling plugin...");
 			setEnabled(false);
 			return;
 		}

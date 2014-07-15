@@ -95,6 +95,11 @@
 			<artifactId>BarAPI</artifactId>
 			<version>3.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.kohsuke</groupId>
+			<artifactId>github-api</artifactId>
+			<version>1.55</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -126,6 +131,7 @@
 									<include>joda-time:joda-time</include>
 									<include>org.jdom:jdom2</include>
 									<include>org.json:json</include>
+									<include>org.kohsuke:github-api</include>
 								</includes>
 							</artifactSet>
 						</configuration>
