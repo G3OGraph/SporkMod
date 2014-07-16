@@ -1,9 +1,11 @@
 package in.parapengu.spork.module.modules.spawn;
 
 import in.parapengu.spork.module.Module;
+import in.parapengu.spork.module.builder.ModuleBuilder;
 import in.parapengu.spork.module.modules.region.RegionModule;
 import in.parapengu.spork.module.modules.region.types.BlockRegion;
 
+@ModuleBuilder()
 public class SpawnModule extends Module {
 
 	private RegionModule region;
