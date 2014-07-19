@@ -12,6 +12,7 @@ import in.parapengu.spork.module.ModuleFactory;
 import in.parapengu.spork.module.ModuleRegistration;
 import in.parapengu.spork.module.modules.filter.FilterModule;
 import in.parapengu.spork.module.modules.region.RegionModule;
+import in.parapengu.spork.module.modules.spawn.SpawnModule;
 import in.parapengu.spork.module.modules.team.TeamModule;
 import in.parapengu.spork.rotation.Rotation;
 import in.parapengu.spork.rotation.RotationSlot;
@@ -49,6 +50,7 @@ public class Spork extends JavaPlugin {
 		registration.register(TeamModule.class);
 		registration.register(RegionModule.class);
 		registration.register(FilterModule.class);
+		registration.register(SpawnModule.class);
 
 		try {
 			factory = new ModuleFactory(registration);

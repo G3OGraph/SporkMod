@@ -5,6 +5,7 @@ import in.parapengu.commons.utils.OtherUtil;
 import in.parapengu.spork.exception.region.ModuleParsingException;
 import in.parapengu.spork.module.modules.region.types.BlockRegion;
 import org.bukkit.ChatColor;
+import org.jdom2.Attribute;
 import org.jdom2.Element;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
@@ -136,6 +137,30 @@ public class ParsingUtil {
 		try {
 			return Double.parseDouble(string);
 		} catch(NumberFormatException ex) {
+			return null;
+		}
+	}
+
+	public static Attribute getAttribute(Element element, String name) {
+		if(element.getAttribute(name) != null) {
+			return element.getAttribute(name);
+		} else {
+			while(element.getParentElement() != null) {
+				element = element.getParentElement();
+				if(element.getAttribute(name) != null) {
+					return element.getAttribute(name);
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public static String getAttributeValue(Element element, String name) {
+		Attribute attribute = getAttribute(element, name);
+		if(attribute != null) {
+			return attribute.getValue();
+		} else {
 			return null;
 		}
 	}
