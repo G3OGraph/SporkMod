@@ -5,7 +5,7 @@ import in.parapengu.spork.module.builder.ModuleBuilder;
 import in.parapengu.spork.module.modules.region.RegionModule;
 import in.parapengu.spork.module.modules.region.types.BlockRegion;
 
-@ModuleBuilder()
+@ModuleBuilder(SpawnBuilder.class)
 public class SpawnModule extends Module {
 
 	private RegionModule region;
