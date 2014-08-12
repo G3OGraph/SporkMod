@@ -33,7 +33,7 @@
 		</repository>
 		<repository>
 			<id>komp-repo</id>
-			<url>http://repo.kompking.info/</url>
+			<url>http://repo.kompking.info/nexus/content/groups/public/</url>
 		</repository>
 	</repositories>
 
